@@ -8,7 +8,6 @@ public class EpicBoardGamesShopApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EpicBoardGamesShopApplication.class, args);
-		System.out.println("Hello World");
 	}
 
 }
