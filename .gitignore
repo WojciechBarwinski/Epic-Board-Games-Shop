@@ -170,3 +170,4 @@ $RECYCLE.BIN/
 
 # Project exclude paths
 /target/
+/src/main/resources/commands
