@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  mysql_ebgs:
+    image: mysql
+    container_name: mysql_epic_board_games_shop
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: epic_board_games_shop_db
+    volumes:
+      - EBGS-DB-volume:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  legendary_warehouse:
+    image: legendary-warehouse:latest
+    container_name: legendary_warehouse_APP
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql_ebgs
+
+volumes:
+  EBGS-DB-volume:
+    driver: local
