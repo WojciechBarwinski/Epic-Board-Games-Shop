@@ -1,7 +1,8 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security;
 
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.LoginDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InvalidLoginException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTGenerator;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.LoginDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,17 +23,23 @@ public class LoginController {
     private final JWTGenerator jwtGenerator;
     private final AuthenticationManager authenticationManager;
 
+
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDto.username(),
-                        loginDto.password()));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginDto.username(),
+                            loginDto.password()));
 
-        String token = jwtGenerator.generateToken(authentication);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = jwtGenerator.generateToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        return new ResponseEntity<>(token, HttpStatus.OK);
+            return new ResponseEntity<>(token, HttpStatus.OK);
+
+        } catch (Exception e) {
+            throw new InvalidLoginException();
+        }
     }
 }

@@ -3,7 +3,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.security;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTAuthEntryPoint;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTAuthenticationFilter;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTGenerator;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,18 +15,28 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
 
+
+    private final HandlerExceptionResolver exceptionResolver;
     private final JWTAuthEntryPoint authEntryPoint;
     private final UserDetailsService userDetailsService;
     private final JWTGenerator tokenGenerator;
 
+
+    public SecurityConfig(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver, UserDetailsService userDetailsService,
+                          JWTAuthEntryPoint authEntryPoint, JWTGenerator tokenGenerator) {
+        this.exceptionResolver = resolver;
+        this.userDetailsService = userDetailsService;
+        this.authEntryPoint = authEntryPoint;
+        this.tokenGenerator = tokenGenerator;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -53,6 +63,6 @@ public class SecurityConfig {
 
     @Bean
     public JWTAuthenticationFilter jwtAuthenticationFilter() {
-        return new JWTAuthenticationFilter(tokenGenerator, userDetailsService);
+        return new JWTAuthenticationFilter(tokenGenerator, userDetailsService, exceptionResolver);
     }
 }
