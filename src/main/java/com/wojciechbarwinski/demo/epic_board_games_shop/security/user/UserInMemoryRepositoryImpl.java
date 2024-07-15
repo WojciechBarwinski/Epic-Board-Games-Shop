@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.security;
+package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;

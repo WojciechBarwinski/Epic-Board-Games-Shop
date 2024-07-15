@@ -1,6 +1,6 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.security.KeyPairGeneratorService;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.keys.KeyPairGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
