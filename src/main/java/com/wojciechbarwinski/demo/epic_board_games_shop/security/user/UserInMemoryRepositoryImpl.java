@@ -1,36 +1,37 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UserInMemoryRepositoryImpl implements UserRepository{
+public class UserInMemoryRepositoryImpl implements UserRepository {
 
-    private final List<User> users;
-    private final BCryptPasswordEncoder encoder;
+    private final List<UserEntity> users;
+    private final PasswordEncoder encoder;
 
-    public UserInMemoryRepositoryImpl(List<User> users, BCryptPasswordEncoder encoder) {
+    public UserInMemoryRepositoryImpl(List<UserEntity> users, PasswordEncoder encoder) {
         this.encoder = encoder;
         this.users = createUsers();
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        for (User user : users) {
-            if (user.getUsername().equals(username)){
+    public Optional<UserEntity> findByUsername(String username) {
+        for (UserEntity user : users) {
+            if (user.getUsername().equals(username)) {
                 return Optional.of(user);
             }
         }
         return Optional.empty();
     }
 
-    private List<User> createUsers(){
+    private List<UserEntity> createUsers() {
         return List.of(
-                new User("owner@mail.com", encoder.encode("owner"), Role.OWNER),
-                new User("seller@mail.com", encoder.encode("seller"), Role.SELLER)
+                new UserEntity("owner@mail.com", encoder.encode("owner"), List.of(Role.OWNER)),
+                new UserEntity("seller@mail.com", encoder.encode("seller"), List.of(Role.SELLER))
         );
     }
 }
