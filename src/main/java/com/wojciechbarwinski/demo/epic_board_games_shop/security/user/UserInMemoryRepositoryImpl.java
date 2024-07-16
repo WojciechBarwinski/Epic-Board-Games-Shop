@@ -1,6 +1,5 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +12,8 @@ public class UserInMemoryRepositoryImpl implements UserRepository {
     private final List<UserEntity> users;
     private final PasswordEncoder encoder;
 
-    public UserInMemoryRepositoryImpl(List<UserEntity> users, PasswordEncoder encoder) {
+    public UserInMemoryRepositoryImpl(List<UserEntity> users,
+                                      PasswordEncoder encoder) {
         this.encoder = encoder;
         this.users = createUsers();
     }

@@ -1,5 +1,8 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security;
 
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTAuthEntryPoint;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTAuthenticationFilter;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +21,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private JwtAuthEntryPoint authEntryPoint;
-    private UserDetailsService userDetailsService;
-    private JWTGenerator tokenGenerator;
-
+    private final JWTAuthEntryPoint authEntryPoint;
+    private final UserDetailsService userDetailsService;
+    private final JWTGenerator tokenGenerator;
 
     public SecurityConfig(UserDetailsService userDetailsService,
-                          JwtAuthEntryPoint authEntryPoint, JWTGenerator tokenGenerator) {
+                          JWTAuthEntryPoint authEntryPoint, JWTGenerator tokenGenerator) {
         this.userDetailsService = userDetailsService;
         this.authEntryPoint = authEntryPoint;
         this.tokenGenerator = tokenGenerator;
@@ -52,7 +54,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
 
     @Bean
     public JWTAuthenticationFilter jwtAuthenticationFilter() {

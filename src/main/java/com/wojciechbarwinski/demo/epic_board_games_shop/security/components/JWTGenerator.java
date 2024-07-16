@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.security;
+package com.wojciechbarwinski.demo.epic_board_games_shop.security.components;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -14,8 +14,7 @@ import java.util.Date;
 @Component
 public class JWTGenerator {
 
-    public static final long JWT_EXPIRATION = 70000;
-    //private static final KeyPair keyPair = Keys.keyPairFor(SignatureAlgorithm.RS256);
+    public static final long JWT_EXPIRATION = 600000; //10 minutes
     private static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 
     public String generateToken(Authentication authentication) {
@@ -23,23 +22,21 @@ public class JWTGenerator {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + JWT_EXPIRATION);
 
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt( new Date())
+                .setIssuedAt(new Date())
                 .setExpiration(expireDate)
-                .signWith(key,SignatureAlgorithm.HS512)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
-        System.out.println("New token :");
-        System.out.println(token);
-        return token;
     }
 
-    public String getUsernameFromJWT(String token){
+    public String getUsernameFromJWT(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+
         return claims.getSubject();
     }
 
@@ -51,7 +48,7 @@ public class JWTGenerator {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was exprired or incorrect", ex.fillInStackTrace());
+            throw new AuthenticationCredentialsNotFoundException("JWT was exprired or incorrect", ex.fillInStackTrace()); //TODO exception handler
         }
     }
 

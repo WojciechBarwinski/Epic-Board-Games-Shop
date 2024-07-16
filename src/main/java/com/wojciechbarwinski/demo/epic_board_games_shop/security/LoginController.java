@@ -1,5 +1,7 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security;
 
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTGenerator;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.LoginDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,11 +30,12 @@ public class LoginController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginDto.getUsername(),
-                        loginDto.getPassword()));
+                        loginDto.username(),
+                        loginDto.password()));
 
         String token = jwtGenerator.generateToken(authentication);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
 }
