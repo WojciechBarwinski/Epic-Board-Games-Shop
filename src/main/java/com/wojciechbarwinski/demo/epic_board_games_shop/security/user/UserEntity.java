@@ -1,14 +1,11 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class UserEntity {
 

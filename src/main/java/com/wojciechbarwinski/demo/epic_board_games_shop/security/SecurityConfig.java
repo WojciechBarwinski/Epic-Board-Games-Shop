@@ -3,6 +3,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.security;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTAuthEntryPoint;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTAuthenticationFilter;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTGenerator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,18 +20,13 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JWTAuthEntryPoint authEntryPoint;
     private final UserDetailsService userDetailsService;
     private final JWTGenerator tokenGenerator;
 
-    public SecurityConfig(UserDetailsService userDetailsService,
-                          JWTAuthEntryPoint authEntryPoint, JWTGenerator tokenGenerator) {
-        this.userDetailsService = userDetailsService;
-        this.authEntryPoint = authEntryPoint;
-        this.tokenGenerator = tokenGenerator;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

@@ -1,5 +1,6 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -7,16 +8,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class UserInMemoryRepositoryImpl implements UserRepository {
 
     private final List<UserEntity> users;
     private final PasswordEncoder encoder;
-
-    public UserInMemoryRepositoryImpl(List<UserEntity> users,
-                                      PasswordEncoder encoder) {
-        this.encoder = encoder;
-        this.users = createUsers();
-    }
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {

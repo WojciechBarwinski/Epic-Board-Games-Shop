@@ -2,6 +2,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.security;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.components.JWTGenerator;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.LoginDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,17 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class LoginController {
 
     private final JWTGenerator jwtGenerator;
     private final AuthenticationManager authenticationManager;
-
-    public LoginController(JWTGenerator jwtGenerator, AuthenticationManager authenticationManager) {
-        this.jwtGenerator = jwtGenerator;
-        this.authenticationManager = authenticationManager;
-    }
 
     @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {

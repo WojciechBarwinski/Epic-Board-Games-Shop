@@ -1,0 +1,64 @@
+<configuration>
+
+    <appender name="ConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd.MM HH:mm:ss} [%green(%thread)] %highlight(%-5level) [%-45.45logger{10}] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="RollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/logFile.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>logs/logFile-%d{yyyy-MM-dd HH}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{MM-dd HH-mm-ss} [%thread] %-5level [%-45.45logger{35}] - %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="RollingFileAppenderForDeveloper" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/developerLog/devLogs.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/developerLog/devLogs-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>1</maxHistory>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{MM-dd HH-mm-ss} [%thread] %-5level [%-45.45logger{35}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+
+
+
+    <root level="INFO">
+        <appender-ref ref="ConsoleAppender"/>
+    </root>
+
+    <logger name="com.wojciechbarwinski.demo.epic_board_games_shop" level="TRACE">
+        <appender-ref ref="RollingFileAppender"/>
+        <appender-ref ref="RollingFileAppenderForDeveloper"/>
+    </logger>
+
+</configuration>

@@ -9,6 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Component
@@ -19,13 +21,13 @@ public class JWTGenerator {
 
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
-        Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + JWT_EXPIRATION);
+        Instant now = Instant.now();
+        Instant expireTime = now.plus(JWT_EXPIRATION, ChronoUnit.MILLIS);
 
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(new Date())
-                .setExpiration(expireDate)
+                .setExpiration(Date.from(expireTime))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
@@ -48,7 +50,7 @@ public class JWTGenerator {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
-            throw new AuthenticationCredentialsNotFoundException("JWT was exprired or incorrect", ex.fillInStackTrace()); //TODO exception handler
+            throw new AuthenticationCredentialsNotFoundException("JWT was exprired or incorrect", ex.fillInStackTrace());
         }
     }
 
