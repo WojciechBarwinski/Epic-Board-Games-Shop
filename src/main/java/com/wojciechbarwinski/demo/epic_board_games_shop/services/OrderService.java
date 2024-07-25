@@ -12,6 +12,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderReposi
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class OrderService {
@@ -36,7 +38,7 @@ public class OrderService {
 
         Order order = mapper.mapOrderDTOToOrderEntity(orderRequestDTO);
 
-        order.setOrderLines(getOrderLinesFromDTO(orderRequestDTO.getOrderLineDTOList(), order));
+        order.setOrderLines(getOrderLinesFromOrderDTO(orderRequestDTO.getOrderLineDTOList(), order));
         order.setTotalPrice(getTotalOrderPrice(order.getOrderLines()));
         order.setEmployeeId(getSellerId());
 
@@ -46,7 +48,8 @@ public class OrderService {
 
     }
 
-    private List<OrderLine> getOrderLinesFromDTO(List<OrderLineDTO> orderLineDTOList, Order order) {
+    private List<OrderLine> getOrderLinesFromOrderDTO(List<OrderLineDTO> orderLineDTOList, Order order) {
+        log.trace("Create OrderLine from OrderDTO");
         List<OrderLine> orderLines = new ArrayList<>();
         List<Long> missingProductsId = new ArrayList<>();
 
@@ -68,6 +71,7 @@ public class OrderService {
         }
 
         if (!missingProductsId.isEmpty()) {
+            log.warn("There are some products in Order that aren't in DB.");
             throw new ProductsNotFoundException(missingProductsId);
         }
 
@@ -85,7 +89,7 @@ public class OrderService {
 
             totalPrice = totalPrice.add(linePrice);
         }
-
+        log.trace("Order price: '{}'", totalPrice);
         return totalPrice;
     }
 
@@ -95,14 +99,18 @@ public class OrderService {
         if (authentication != null && authentication.isAuthenticated()) {
             Object principal = authentication.getPrincipal();
             if (principal instanceof UserDetails) {
-                return ((UserDetails) principal).getUsername();
+                String username = ((UserDetails) principal).getUsername();
+                log.trace("Order was place by user with id:'{}'", username);
+                return username;
             }
         }
+
+        log.error("Someone try proceed order without being login!");
         throw new InvalidSellerException();
     }
 
     private Map<Long, Product> getProductsFromOrderLines(List<OrderLineDTO> orderLineDTOList) {
-
+        log.trace("Create map of products from OrderLineDTOs");
         List<Long> productsIdsFromOrder = orderLineDTOList.stream()
                 .map(OrderLineDTO::productId)
                 .toList();

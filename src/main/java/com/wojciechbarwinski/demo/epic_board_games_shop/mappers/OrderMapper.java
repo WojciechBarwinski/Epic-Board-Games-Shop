@@ -7,33 +7,35 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Address;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderLine;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 class OrderMapper {
 
 
     Order mapOrderDTOToOrderEntity(OrderRequestDTO orderRequestDTO) {
+        log.trace("map OrderDTO to Order Entity");
         return Order.builder()
                 .ordererMail(orderRequestDTO.getOrdererMail())
                 .address(mapAddressDTOToAddress(orderRequestDTO.getAddressToSend()))
                 .build();
-
     }
 
     private Address mapAddressDTOToAddress(AddressDTO addressDTO) {
+        log.trace("map AddressDTO to Address Entity");
         return Address.builder()
                 .street(addressDTO.street())
                 .city(addressDTO.city())
                 .zipCode(addressDTO.zipCode())
                 .phoneNumber(addressDTO.phoneNumber())
                 .build();
-
     }
 
     OrderResponseDTO mapOrderToOrderResponseDTO(Order order) {
-
+        log.trace("map Order Entity to OrderDTO");
         return OrderResponseDTO.builder()
                 .sellerId(order.getEmployeeId())
                 .totalPrice(order.getTotalPrice())
@@ -44,6 +46,7 @@ class OrderMapper {
     }
 
     private AddressDTO mapAddressToAddressDTO(Address address) {
+        log.trace("map Address Entity to AddressDTO");
         return new AddressDTO(
                 address.getStreet(),
                 address.getCity(),
