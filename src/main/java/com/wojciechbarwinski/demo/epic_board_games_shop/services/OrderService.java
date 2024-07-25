@@ -1,16 +1,17 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.services;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderLine;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InvalidSellerException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,8 +20,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class OrderService {
 
@@ -28,17 +31,12 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final MapperFacade mapper;
 
-    OrderService(OrderRepository orderRepository, ProductRepository productRepository, MapperFacade mapper) {
-        this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
-        this.mapper = mapper;
-    }
 
-
-    OrderResponseDTO orderProceed(OrderRequestDTO orderRequestDTO) {
+    OrderResponseDTO processOrder(OrderRequestDTO orderRequestDTO) {
 
         Order order = mapper.mapOrderDTOToOrderEntity(orderRequestDTO);
-        order.setOrderLines(getOrderLineFromDTO(orderRequestDTO.getOrderLineDTOList(), order));
+
+        order.setOrderLines(getOrderLinesFromDTO(orderRequestDTO.getOrderLineDTOList(), order));
         order.setTotalPrice(getTotalOrderPrice(order.getOrderLines()));
         order.setEmployeeId(getSellerId());
 
@@ -48,19 +46,22 @@ public class OrderService {
 
     }
 
-    private List<OrderLine> getOrderLineFromDTO(List<OrderLineDTO> orderLineDTOList, Order order) {
+    private List<OrderLine> getOrderLinesFromDTO(List<OrderLineDTO> orderLineDTOList, Order order) {
         List<OrderLine> orderLines = new ArrayList<>();
         List<Long> missingProductsId = new ArrayList<>();
 
-        for (OrderLineDTO orderLineDTO : orderLineDTOList) {
-            Optional<Product> productById = productRepository.findById(orderLineDTO.productId());
+        Map<Long, Product> productsFromDB = getProductsFromOrderLines(orderLineDTOList);
 
-            if (productById.isEmpty()) {
+        for (OrderLineDTO orderLineDTO : orderLineDTOList) {
+            Long productId = orderLineDTO.productId();
+            Product productById = productsFromDB.get(productId);
+
+            if (productById == null) {
                 missingProductsId.add(orderLineDTO.productId());
             } else {
                 orderLines.add(OrderLine.builder()
                         .order(order)
-                        .product(productById.get())
+                        .product(productById)
                         .quantity(orderLineDTO.quantity())
                         .build());
             }
@@ -73,12 +74,12 @@ public class OrderService {
         return orderLines;
     }
 
-    private BigDecimal getTotalOrderPrice(List<OrderLine> orderLines){
+    private BigDecimal getTotalOrderPrice(List<OrderLine> orderLines) {
         BigDecimal totalPrice = new BigDecimal("0");
 
         for (OrderLine orderLine : orderLines) {
             int quantity = orderLine.getQuantity();
-            BigDecimal pricePerUnit  = orderLine.getProduct().getPrice();
+            BigDecimal pricePerUnit = orderLine.getProduct().getPrice();
 
             BigDecimal linePrice = pricePerUnit.multiply(BigDecimal.valueOf(quantity));
 
@@ -88,7 +89,7 @@ public class OrderService {
         return totalPrice;
     }
 
-    private String getSellerId(){
+    private String getSellerId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.isAuthenticated()) {
@@ -98,5 +99,17 @@ public class OrderService {
             }
         }
         throw new InvalidSellerException();
+    }
+
+    private Map<Long, Product> getProductsFromOrderLines(List<OrderLineDTO> orderLineDTOList) {
+
+        List<Long> productsIdsFromOrder = orderLineDTOList.stream()
+                .map(OrderLineDTO::productId)
+                .toList();
+
+        List<Product> products = productRepository.findAllById(productsIdsFromOrder);
+
+        return products.stream()
+                .collect(Collectors.toMap(Product::getId, product -> product));
     }
 }

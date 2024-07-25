@@ -1,6 +1,6 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.components;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InvalidAuthenticationException;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
