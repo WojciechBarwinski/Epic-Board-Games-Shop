@@ -15,6 +15,6 @@ public class OrderRequestDTO {
 
     private AddressDTO addressToSend;
 
-    private List<OrderLineDTO> orderLineDTOList;
+    private List<OrderLineDTO> orderLineDTOs;
 
 }

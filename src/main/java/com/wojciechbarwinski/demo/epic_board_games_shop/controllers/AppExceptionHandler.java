@@ -25,7 +25,7 @@ public class AppExceptionHandler {
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ApplicationSecurityException.class)
-    public ErrorResponse<String> LoginException(ApplicationSecurityException exception) {
+    public ErrorResponse<String> loginException(ApplicationSecurityException exception) {
 
         return new ErrorResponse<>(exception.getMessage());
     }

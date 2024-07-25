@@ -38,7 +38,7 @@ public class OrderService {
 
         Order order = mapper.mapOrderDTOToOrderEntity(orderRequestDTO);
 
-        order.setOrderLines(getOrderLinesFromOrderDTO(orderRequestDTO.getOrderLineDTOList(), order));
+        order.setOrderLines(getOrderLinesFromOrderDTO(orderRequestDTO.getOrderLineDTOs(), order));
         order.setTotalPrice(getTotalOrderPrice(order.getOrderLines()));
         order.setEmployeeId(getSellerId());
 

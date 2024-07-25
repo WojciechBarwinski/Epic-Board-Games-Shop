@@ -8,11 +8,13 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Address;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderLine;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Component
 class OrderMapper {
 
 
@@ -41,7 +43,7 @@ class OrderMapper {
                 .totalPrice(order.getTotalPrice())
                 .ordererMail(order.getOrdererMail())
                 .addressToSend(mapAddressToAddressDTO(order.getAddress()))
-                .orderLineDTOList(mapOrderLineToOrderLineDTO(order.getOrderLines()))
+                .orderLineDTOs(mapOrderLineToOrderLineDTO(order.getOrderLines()))
                 .build();
     }
 
