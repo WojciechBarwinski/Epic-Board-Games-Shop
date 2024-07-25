@@ -1,11 +1,13 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
-@Getter
+@Builder
+@Data
 @Entity
 @Table(name = "product")
 public class Product {

@@ -2,21 +2,21 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.exceptions;
 
 import lombok.Getter;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Getter
-public class ProductsNotFoundException extends ApplicationException{
+public class ProductsNotFoundException extends ApplicationException {
 
-    private final List<Long> missingProductsId;
-    private final String  message;
+    private final Collection<Long> missingProductsId;
 
-    public ProductsNotFoundException(List<Long> missingProductsId) {
+
+    public ProductsNotFoundException(Collection<Long> missingProductsId) {
+        super(generateMessage(missingProductsId));
         this.missingProductsId = missingProductsId;
-        this.message = generateMessage(missingProductsId);
     }
 
-    private String generateMessage(List<Long> missingProductsId) {
+    private static String generateMessage(Collection<Long> missingProductsId) {
         return "We can't find products with id = " +
                 missingProductsId.stream()
                         .map(String::valueOf)

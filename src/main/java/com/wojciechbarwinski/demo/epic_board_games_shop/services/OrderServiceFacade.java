@@ -14,6 +14,6 @@ public class OrderServiceFacade {
     }
 
     public OrderResponseDTO orderProceed(OrderRequestDTO orderRequestDTO) {
-        return orderService.orderProceed(orderRequestDTO);
+        return orderService.processOrder(orderRequestDTO);
     }
 }

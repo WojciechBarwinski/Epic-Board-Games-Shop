@@ -1,10 +1,11 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.components;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InvalidAuthenticationException;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidAuthenticationException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -20,8 +21,8 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
-
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     private final JWTGenerator tokenGenerator;
@@ -42,9 +43,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
 
+
         try {
             String token = getJWTFromRequest(request);
             if (StringUtils.hasText(token) && tokenGenerator.validateToken(token)) {
+                log.trace("check JWT");
                 String username = tokenGenerator.getUsernameFromJWT(token);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -60,6 +63,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
 
         } catch (AuthenticationCredentialsNotFoundException e) {
+            log.warn("JWT token has expired or is incorrect");
             exceptionResolver.resolveException(request, response, null, new InvalidAuthenticationException());
         }
 
