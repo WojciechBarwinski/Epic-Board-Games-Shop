@@ -53,11 +53,6 @@ public class LoginController {
     }
 
     private void checkAndTrowExceptionIfThereIsNoLoginData(LoginDTO loginDTO) {
-        if (loginDTO == null) { //is there any chance that loginDTO will be null?
-            log.warn("Login attempt with null LoginDTO");
-            throw new MissingCredentialsException();
-        }
-
         validateField(loginDTO.username());
         validateField(loginDTO.password());
     }

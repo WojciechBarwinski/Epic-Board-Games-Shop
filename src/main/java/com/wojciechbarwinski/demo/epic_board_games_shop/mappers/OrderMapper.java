@@ -7,6 +7,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Address;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderLine;
+import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.MappingToDTOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +19,7 @@ import java.util.List;
 class OrderMapper {
 
 
-    Order mapOrderDTOToOrderEntity(OrderRequestDTO orderRequestDTO) {
+    Order mapOrderRequestDTOToOrderEntity(OrderRequestDTO orderRequestDTO) {
         log.trace("map OrderDTO to Order Entity");
         return Order.builder()
                 .ordererMail(orderRequestDTO.getOrdererMail())
@@ -43,12 +44,17 @@ class OrderMapper {
                 .totalPrice(order.getTotalPrice())
                 .ordererMail(order.getOrdererMail())
                 .addressToSend(mapAddressToAddressDTO(order.getAddress()))
+                .status(order.getOrderStatus().name())
                 .orderLineDTOs(mapOrderLineToOrderLineDTO(order.getOrderLines()))
                 .build();
     }
 
     private AddressDTO mapAddressToAddressDTO(Address address) {
         log.trace("map Address Entity to AddressDTO");
+        if (address == null){
+            log.warn("Address is null");
+            throw new MappingToDTOException("Address to map is null");
+        }
         return new AddressDTO(
                 address.getStreet(),
                 address.getCity(),
@@ -58,6 +64,11 @@ class OrderMapper {
     }
 
     private List<OrderLineDTO> mapOrderLineToOrderLineDTO(List<OrderLine> orderLines) {
+        log.trace("map OrderLines to OrderLineDTOs");
+        if (orderLines == null || orderLines.isEmpty()){
+            log.warn("Order has no Order line");
+            throw new MappingToDTOException("List of OrderLines are null/empty");
+        }
         List<OrderLineDTO> orderLinesDTO = new ArrayList<>();
 
         for (OrderLine orderLine : orderLines) {

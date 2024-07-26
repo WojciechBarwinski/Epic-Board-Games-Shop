@@ -13,8 +13,8 @@ public class MapperFacade {
 
     private final OrderMapper orderMapper;
 
-    public Order mapOrderDTOToOrderEntity(OrderRequestDTO orderRequestDTO){
-        return orderMapper.mapOrderDTOToOrderEntity(orderRequestDTO);
+    public Order mapOrderRequestDTOToOrderEntity(OrderRequestDTO orderRequestDTO){
+        return orderMapper.mapOrderRequestDTOToOrderEntity(orderRequestDTO);
     }
 
     public OrderResponseDTO mapOrderToOrderResponseDTO(Order order){

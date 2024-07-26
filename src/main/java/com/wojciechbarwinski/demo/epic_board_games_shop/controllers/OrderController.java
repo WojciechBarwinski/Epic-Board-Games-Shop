@@ -24,6 +24,5 @@ public class OrderController {
         log.debug("Start proceed order for '{}'", orderRequestDTO.getOrdererMail());
 
         return orderServiceFacade.orderProceed(orderRequestDTO);
-
     }
 }

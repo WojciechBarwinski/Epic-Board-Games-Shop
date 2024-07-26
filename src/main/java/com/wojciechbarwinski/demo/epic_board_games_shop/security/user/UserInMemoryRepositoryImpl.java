@@ -1,7 +1,5 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -11,18 +9,16 @@ import java.util.Optional;
 
 @Slf4j
 @Repository
-@RequiredArgsConstructor
 public class UserInMemoryRepositoryImpl implements UserRepository {
 
     private final List<UserEntity> users;
     private final PasswordEncoder encoder;
 
-    @PostConstruct
-    private void init() {
-        log.trace("initial Users data");
-        users.addAll(createUsers());
+    public UserInMemoryRepositoryImpl(PasswordEncoder encoder) {
+        log.trace("initial Users data in InMemoryRepository");
+        this.encoder = encoder;
+        users = (createUsers());
     }
-
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {

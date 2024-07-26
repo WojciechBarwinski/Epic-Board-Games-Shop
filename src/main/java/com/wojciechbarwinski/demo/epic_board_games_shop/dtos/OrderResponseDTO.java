@@ -22,5 +22,7 @@ public class OrderResponseDTO {
 
     private AddressDTO addressToSend;
 
+    private String status;
+
     private List<OrderLineDTO> orderLineDTOs;
 }

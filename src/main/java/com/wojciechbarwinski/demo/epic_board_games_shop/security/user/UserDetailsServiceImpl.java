@@ -1,6 +1,5 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidLoginException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> {
                     log.warn("User with username '{}' not found", username);
-                    return new InvalidLoginException();
+                    return new UsernameNotFoundException("Incorrect login or password");
                 });
 
         return new User(user.getUsername(),
