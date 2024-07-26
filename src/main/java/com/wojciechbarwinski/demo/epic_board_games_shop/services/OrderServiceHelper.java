@@ -6,6 +6,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderLine;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
+import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InsufficientStockException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
@@ -43,6 +44,7 @@ public class OrderServiceHelper {
         log.trace("Create OrderLine from OrderDTO");
         List<OrderLine> orderLines = new ArrayList<>();
         List<Long> missingProductsId = new ArrayList<>();
+        List<Long> incorrectQuantityProductsId = new ArrayList<>();
 
         Map<Long, Product> productsFromDB = getProductsFromOrderLines(orderLineDTOs);
 
@@ -52,6 +54,8 @@ public class OrderServiceHelper {
 
             if (productById == null) {
                 missingProductsId.add(orderLineDTO.productId());
+            } else if (productById.getQuantity() <= orderLineDTO.quantity()) {
+                incorrectQuantityProductsId.add(orderLineDTO.productId());
             } else {
                 orderLines.add(OrderLine.builder()
                         .order(order)
@@ -61,12 +65,20 @@ public class OrderServiceHelper {
             }
         }
 
+        checkAndThrowExceptionIfThereAreSomeIdInErrorsList(missingProductsId, incorrectQuantityProductsId);
+
+        return orderLines;
+    }
+
+    private static void checkAndThrowExceptionIfThereAreSomeIdInErrorsList(List<Long> missingProductsId, List<Long> incorrectQuantityProductsId) {
         if (!missingProductsId.isEmpty()) {
             log.warn("There are some products in Order that aren't in DB.");
             throw new ProductsNotFoundException(missingProductsId);
         }
-
-        return orderLines;
+        if (!incorrectQuantityProductsId.isEmpty()) {
+            log.warn("Some items are ordered in greater quantity then are in stock");
+            throw new InsufficientStockException(incorrectQuantityProductsId);
+        }
     }
 
     private BigDecimal getTotalOrderPrice(List<OrderLine> orderLines) {

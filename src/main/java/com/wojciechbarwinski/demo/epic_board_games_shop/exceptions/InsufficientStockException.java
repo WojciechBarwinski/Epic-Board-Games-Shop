@@ -1,19 +1,17 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.exceptions;
 
-import lombok.Getter;
-
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@Getter
-public class ProductsNotFoundException extends ApplicationException {
+public class InsufficientStockException extends ApplicationException {
 
-    public ProductsNotFoundException(Collection<Long> missingProductsId) {
-        super(generateMessage(missingProductsId));
+
+    public InsufficientStockException(Collection<Long> incorrectQuantityProductsId) {
+        super(generateMessage(incorrectQuantityProductsId));
     }
 
     private static String generateMessage(Collection<Long> missingProductsId) {
-        return "We can't find products with id = " +
+        return "There is incorrect data about stock of this items = " +
                 missingProductsId.stream()
                         .map(String::valueOf)
                         .collect(Collectors.joining(", "));
