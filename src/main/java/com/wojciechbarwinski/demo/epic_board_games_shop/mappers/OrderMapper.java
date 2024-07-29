@@ -40,6 +40,7 @@ class OrderMapper {
     OrderResponseDTO mapOrderToOrderResponseDTO(Order order) {
         log.trace("map Order Entity to OrderDTO");
         return OrderResponseDTO.builder()
+                .id(order.getId())
                 .sellerId(order.getEmployeeId())
                 .totalPrice(order.getTotalPrice())
                 .ordererMail(order.getOrdererMail())

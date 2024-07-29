@@ -14,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderResponseDTO {
 
+    private Long id;
+
     private String sellerId;
 
     private BigDecimal totalPrice;

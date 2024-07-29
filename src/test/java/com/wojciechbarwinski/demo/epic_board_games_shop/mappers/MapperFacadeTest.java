@@ -97,6 +97,7 @@ class MapperFacadeTest {
 
         //then
         assertNotNull(orderResponseDTO);
+        assertNotNull(orderResponseDTO.getId());
         assertEquals(order.getEmployeeId(), orderResponseDTO.getSellerId());
         assertEquals(order.getTotalPrice(), orderResponseDTO.getTotalPrice());
         assertEquals(order.getOrdererMail(), orderResponseDTO.getOrdererMail());
