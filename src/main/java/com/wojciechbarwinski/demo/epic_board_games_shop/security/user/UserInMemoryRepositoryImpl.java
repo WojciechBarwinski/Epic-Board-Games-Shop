@@ -15,14 +15,12 @@ public class UserInMemoryRepositoryImpl implements UserRepository {
     private final PasswordEncoder encoder;
 
     public UserInMemoryRepositoryImpl(PasswordEncoder encoder) {
-        log.trace("initial Users data in InMemoryRepository");
         this.encoder = encoder;
         users = (createUsers());
     }
 
     @Override
     public Optional<UserEntity> findByUsername(String username) {
-        log.trace("find user by username : '{}'", username);
         for (UserEntity user : users) {
             if (user.getUsername().equals(username)) {
                 return Optional.of(user);

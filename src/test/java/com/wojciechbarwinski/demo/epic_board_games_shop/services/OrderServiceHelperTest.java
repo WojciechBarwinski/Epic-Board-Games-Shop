@@ -1,8 +1,8 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.services;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.AddressDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Address;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
@@ -10,6 +10,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InsufficientStockException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationComponent;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,10 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -37,6 +34,9 @@ class OrderServiceHelperTest {
     @Mock
     private ProductRepository productRepository;
 
+    @Mock
+    private AuthenticationComponent authenticationComponent;
+
     @InjectMocks
     private OrderServiceHelper orderHelper;
 
@@ -48,12 +48,12 @@ class OrderServiceHelperTest {
     @Test
     void shouldPrepareOrderFromOrderDTOToSave() {
         //given
-        setUpSecurityContextForTests(true);
-        OrderRequestDTO orderDTO = createCorrectOrderRequestDTO();
+        CreateOrderRequestDTO orderDTO = createCorrectOrderRequestDTO();
         Order order = createOrderInStageAfterMapping();
         String employeeId = "username@mail";
         BigDecimal expectedTotalPrice = BigDecimal.valueOf(175); // 2 x 50 and 3 x 25 look into createProductsListForMock
 
+        when(authenticationComponent.getSellerId()).thenReturn(employeeId);
         when(productRepository.findAllById(Mockito.any())).thenReturn(createProductsListForMock());
 
         //when
@@ -66,17 +66,17 @@ class OrderServiceHelperTest {
         assertEquals(employeeId, preparedOrder.getEmployeeId());
         assertEquals(2, preparedOrder.getOrderLines().get(0).getQuantity());
     }
-    
-    // whe order quantity is more than in stock
+
 
     @Test
     void shouldThrowExceptionBecauseThereIsNoAuthUserWhenOrderIsPlace() {
         //given
-        setUpSecurityContextForTests(false);
-        OrderRequestDTO orderDTO = createCorrectOrderRequestDTO();
+        // setUpSecurityContextForTests(false);
+        CreateOrderRequestDTO orderDTO = createCorrectOrderRequestDTO();
         Order order = createOrderInStageAfterMapping();
         String expectedMessage = "No authenticated user found.";
 
+        when(authenticationComponent.getSellerId()).thenThrow(new InvalidSellerException());
         when(productRepository.findAllById(Mockito.any())).thenReturn(createProductsListForMock());
 
         //when
@@ -91,9 +91,9 @@ class OrderServiceHelperTest {
     void shouldThrowExceptionBecauseInOrderThereIsProductIdWithIsNotInDB() {
         //given
         Long incorrectId = 4L; //more than 3
-        OrderRequestDTO orderDTO = createOrderRequestDTOWithIncorrectProductId(incorrectId);
+        CreateOrderRequestDTO orderDTO = createOrderRequestDTOWithIncorrectProductId(incorrectId);
         Order order = createOrderInStageAfterMapping();
-        String expectedMessage = "We can't find products with id = " + incorrectId;
+        String expectedMessage = "There are missing products with id = " + incorrectId;
 
         when(productRepository.findAllById(Mockito.any())).thenReturn(createProductsListForMock());
 
@@ -109,7 +109,7 @@ class OrderServiceHelperTest {
     void shouldThrowExceptionBecauseInOrderThereIsWrongQuantity() {
         //given
         OrderLineDTO orderLineWithWrongQuantity = new OrderLineDTO(3L, 100);
-        OrderRequestDTO orderDTO = createOrderRequestDTOWithWrongQuantity(orderLineWithWrongQuantity);
+        CreateOrderRequestDTO orderDTO = createOrderRequestDTOWithWrongQuantity(orderLineWithWrongQuantity);
         Order order = createOrderInStageAfterMapping();
         String expectedMessage = "There is incorrect data about stock of this items = 3";
 
@@ -121,22 +121,6 @@ class OrderServiceHelperTest {
 
         //then
         assertEquals(expectedMessage, exception.getMessage());
-    }
-
-
-    private void setUpSecurityContextForTests(boolean isAuthenticated) {
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Authentication authentication = Mockito.mock(Authentication.class);
-
-        SecurityContextHolder.setContext(securityContext);
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.isAuthenticated()).thenReturn(isAuthenticated);
-
-        if (isAuthenticated) {
-            UserDetails userDetails = Mockito.mock(UserDetails.class);
-            when(authentication.getPrincipal()).thenReturn(userDetails);
-            when(userDetails.getUsername()).thenReturn("username@mail");
-        }
     }
 
     private List<Product> createProductsListForMock() {
@@ -176,27 +160,27 @@ class OrderServiceHelperTest {
                 .build();
     }
 
-    private OrderRequestDTO createCorrectOrderRequestDTO() {
+    private CreateOrderRequestDTO createCorrectOrderRequestDTO() {
         AddressDTO addressToSend = new AddressDTO("Street", "City", "ZipCode", "PhoneNumber");
         OrderLineDTO orderLine1 = new OrderLineDTO(1L, 2);
         OrderLineDTO orderLine2 = new OrderLineDTO(2L, 3);
 
-        return new OrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
+        return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
     }
 
-    private OrderRequestDTO createOrderRequestDTOWithIncorrectProductId(Long incorrectId) {
+    private CreateOrderRequestDTO createOrderRequestDTOWithIncorrectProductId(Long incorrectId) {
         AddressDTO addressToSend = new AddressDTO("Street", "City", "ZipCode", "PhoneNumber");
         OrderLineDTO orderLine1 = new OrderLineDTO(1L, 2);
         OrderLineDTO orderLine2 = new OrderLineDTO(incorrectId, 3);
 
-        return new OrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
+        return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
     }
 
-    private OrderRequestDTO createOrderRequestDTOWithWrongQuantity(OrderLineDTO orderLine) {
+    private CreateOrderRequestDTO createOrderRequestDTOWithWrongQuantity(OrderLineDTO orderLine) {
         AddressDTO addressToSend = new AddressDTO("Street", "City", "ZipCode", "PhoneNumber");
         OrderLineDTO orderLine1 = new OrderLineDTO(1L, 5);
         OrderLineDTO orderLine2 = new OrderLineDTO(2L, 5);
 
-        return new OrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2, orderLine));
+        return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2, orderLine));
     }
 }

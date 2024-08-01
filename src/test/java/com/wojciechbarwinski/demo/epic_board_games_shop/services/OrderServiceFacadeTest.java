@@ -2,7 +2,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.services;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.AddressDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import org.junit.jupiter.api.Test;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
+@ActiveProfiles("local")
 class OrderServiceFacadeTest {
 
 
@@ -31,7 +33,7 @@ class OrderServiceFacadeTest {
     @WithMockUser(username = "owner@mail.com")
     void integrationOrderProceed() {
         //given
-        OrderRequestDTO orderRequest = createOrderRequest();
+        CreateOrderRequestDTO orderRequest = createOrderRequest();
         BigDecimal expectedTotalPrice = BigDecimal.valueOf(748.49); // product id1 = 525.50 x1 quantity, id2 = 222.99x1 quantity  SUM 748.49
         String expectedStatus = OrderStatus.PLACED.name();
         int expectedListDTOSize = 2;
@@ -53,13 +55,13 @@ class OrderServiceFacadeTest {
     }
 
 
-    OrderRequestDTO createOrderRequest() {
+    CreateOrderRequestDTO createOrderRequest() {
 
         AddressDTO addressToSend = new AddressDTO("Street", "City", "ZipCode", "PhoneNumber");
         OrderLineDTO orderLine1 = new OrderLineDTO(1L, 1);
         OrderLineDTO orderLine2 = new OrderLineDTO(2L, 1);
 
-        return new OrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
+        return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
     }
 
 }

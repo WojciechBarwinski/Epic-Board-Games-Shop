@@ -50,8 +50,6 @@
 
 
 
-
-
     <root level="INFO">
         <appender-ref ref="ConsoleAppender"/>
     </root>

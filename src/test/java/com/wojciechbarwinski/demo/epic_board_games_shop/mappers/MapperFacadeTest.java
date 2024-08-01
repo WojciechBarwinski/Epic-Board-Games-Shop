@@ -3,7 +3,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.mappers;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.AddressDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.*;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.MappingToDTOException;
@@ -22,19 +22,19 @@ class MapperFacadeTest {
     void shouldMapOrderDTOToOrderEntity(){
         //given
         AddressDTO addressDTO = new AddressDTO("Ulica", "Miasto", "12-345", "123-456-789");
-        OrderRequestDTO orderRequestDTO = new OrderRequestDTO("orderer mail",
+        CreateOrderRequestDTO createOrderRequestDto = new CreateOrderRequestDTO("orderer mail",
                 addressDTO,
                 List.of(new OrderLineDTO(1L, 2)));
 
         //when
-        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(orderRequestDTO);
+        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
 
         //then
         assertNotNull(order);
-        assertNull(order.getId()); //mapper should not map ID because don't have it
-        assertNull(order.getOrderLines()); //mapper should not map order lines
+        assertNull(order.getId()); //mapper should not map ID because CreateOrderRequestDTO don't have it
+        assertNull(order.getOrderLines()); //mapper should not map order lines, because they are map letter with DB connection
 
-        assertEquals(orderRequestDTO.getOrdererMail(), order.getOrdererMail());
+        assertEquals(createOrderRequestDto.getOrdererMail(), order.getOrdererMail());
         assertEquals(addressDTO.street(), order.getAddress().getStreet());
         assertEquals(addressDTO.city(), order.getAddress().getCity());
         assertEquals(addressDTO.zipCode(), order.getAddress().getZipCode());
@@ -45,18 +45,18 @@ class MapperFacadeTest {
     void shouldMapOrderDTOToOrderEntityWithNullValues(){
         //given
         AddressDTO addressDTO = new AddressDTO(null, null, null, null);
-        OrderRequestDTO orderRequestDTO = new OrderRequestDTO("orderer mail",
+        CreateOrderRequestDTO createOrderRequestDto = new CreateOrderRequestDTO("orderer mail",
                 addressDTO,
                 null);
 
         //when
-        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(orderRequestDTO);
+        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
 
         //then
         assertNotNull(order);
         assertNull(order.getId()); //mapper should not map ID because don't have it
         assertNull(order.getOrderLines()); //mapper should not map order lines
-        assertEquals(orderRequestDTO.getOrdererMail(), order.getOrdererMail());
+        assertEquals(createOrderRequestDto.getOrdererMail(), order.getOrdererMail());
         assertNotNull(order.getAddress());
         assertNull(order.getAddress().getStreet());
         assertNull(order.getAddress().getCity());
@@ -68,19 +68,19 @@ class MapperFacadeTest {
     void shouldMapOrderDTOToOrderEntityWithEmptyStrings(){
         //given
         AddressDTO addressDTO = new AddressDTO("", "", "", "");
-        OrderRequestDTO orderRequestDTO = new OrderRequestDTO("orderer mail",
+        CreateOrderRequestDTO createOrderRequestDto = new CreateOrderRequestDTO("orderer mail",
                 addressDTO,
                 List.of(new OrderLineDTO(1L, 2)));
 
         //when
-        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(orderRequestDTO);
+        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
 
         //then
         assertNotNull(order);
         assertNull(order.getId()); //mapper should not map ID because don't have it
         assertNull(order.getOrderLines()); //mapper should not map order lines
 
-        assertEquals(orderRequestDTO.getOrdererMail(), order.getOrdererMail());
+        assertEquals(createOrderRequestDto.getOrdererMail(), order.getOrdererMail());
         assertEquals(addressDTO.street(), order.getAddress().getStreet());
         assertEquals(addressDTO.city(), order.getAddress().getCity());
         assertEquals(addressDTO.zipCode(), order.getAddress().getZipCode());

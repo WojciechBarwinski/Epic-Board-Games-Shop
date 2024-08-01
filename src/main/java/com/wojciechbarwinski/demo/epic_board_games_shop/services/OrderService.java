@@ -1,6 +1,6 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.services;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
@@ -18,10 +18,10 @@ public class OrderService {
     private final MapperFacade mapper;
     private final OrderServiceHelper orderHelper;
 
-    OrderResponseDTO processOrder(OrderRequestDTO orderRequestDTO) {
+    OrderResponseDTO processOrder(CreateOrderRequestDTO createOrderRequestDto) {
 
-        Order order = orderHelper.prepareOrderToSave(orderRequestDTO,
-                mapper.mapOrderRequestDTOToOrderEntity(orderRequestDTO));
+        Order order = orderHelper.prepareOrderToSave(createOrderRequestDto,
+                mapper.mapOrderRequestDTOToOrderEntity(createOrderRequestDto));
 
         Order orderAfterSave = orderRepository.save(order);
 

@@ -50,7 +50,7 @@ public class JWTGenerator {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception ex) {
-            throw new AuthenticationCredentialsNotFoundException("");
+            throw new AuthenticationCredentialsNotFoundException("JWT is expired or incorrect");
         }
     }
 

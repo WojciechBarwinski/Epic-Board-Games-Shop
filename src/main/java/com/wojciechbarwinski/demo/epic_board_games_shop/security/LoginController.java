@@ -30,9 +30,9 @@ public class LoginController {
     @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
 
-        log.debug("Start login username '{}'", loginDto.username());
+        log.debug("Start login username ");
 
-        checkAndTrowExceptionIfThereIsNoLoginData(loginDto);
+        throwExceptionIfThereIsNoLoginData(loginDto);
 
         try {
             Authentication authentication = authenticationManager.authenticate(
@@ -43,7 +43,6 @@ public class LoginController {
             String token = jwtGenerator.generateToken(authentication);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            log.info("User '{}' logged in successfully", loginDto.username());
             return new ResponseEntity<>(token, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -52,13 +51,13 @@ public class LoginController {
         }
     }
 
-    private void checkAndTrowExceptionIfThereIsNoLoginData(LoginDTO loginDTO) {
-        validateField(loginDTO.username());
-        validateField(loginDTO.password());
+    private void throwExceptionIfThereIsNoLoginData(LoginDTO loginDTO) {
+        validateIsNorEmpty(loginDTO.username());
+        validateIsNorEmpty(loginDTO.password());
     }
 
-    private void validateField(String field) {
-        if (field == null || field.trim().isEmpty()) {
+    private void validateIsNorEmpty(String field) {
+        if (field == null || field.isBlank()) {
             log.warn("Missing or empty field during login attempt");
             throw new MissingCredentialsException();
         }

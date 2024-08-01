@@ -10,23 +10,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @ControllerAdvice
 public class AppExceptionHandler {
 
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductsNotFoundException.class)
-    public ErrorResponse<String> missingProductException(ProductsNotFoundException exception) {
+    public ErrorResponse<String> productsNotFoundException(ProductsNotFoundException exception) {
 
         return new ErrorResponse<>(exception.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ApplicationSecurityException.class)
-    public ErrorResponse<String> loginException(ApplicationSecurityException exception) {
+    public ErrorResponse<String> applicationSecurityException(ApplicationSecurityException exception) {
 
         return new ErrorResponse<>(exception.getMessage());
     }

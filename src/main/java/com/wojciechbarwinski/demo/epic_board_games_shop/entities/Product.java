@@ -11,18 +11,23 @@ import java.math.BigDecimal;
 @Builder
 @Data
 @Entity
-@Table(name = "product")
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "product")
 public class Product {
+
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "quantity")
     private int quantity;
 
 }

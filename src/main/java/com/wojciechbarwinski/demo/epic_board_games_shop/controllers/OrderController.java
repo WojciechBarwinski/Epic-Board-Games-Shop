@@ -1,6 +1,6 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.controllers;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.services.OrderServiceFacade;
 import lombok.RequiredArgsConstructor;
@@ -19,10 +19,10 @@ public class OrderController {
     private final OrderServiceFacade orderServiceFacade;
 
     @PostMapping
-    OrderResponseDTO createOrder(@RequestBody OrderRequestDTO orderRequestDTO) {
+    OrderResponseDTO createOrder(@RequestBody CreateOrderRequestDTO createOrderRequestDto) {
 
-        log.debug("Start proceed order for '{}'", orderRequestDTO.getOrdererMail());
+        log.debug("Start proceed order for '{}'", createOrderRequestDto.getOrdererMail());
 
-        return orderServiceFacade.orderProceed(orderRequestDTO);
+        return orderServiceFacade.orderProceed(createOrderRequestDto);
     }
 }

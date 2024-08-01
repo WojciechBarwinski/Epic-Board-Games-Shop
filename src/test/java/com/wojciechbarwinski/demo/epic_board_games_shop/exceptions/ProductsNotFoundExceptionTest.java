@@ -13,7 +13,7 @@ class ProductsNotFoundExceptionTest {
     void testMessageGenerate(){
         //Given
         List<Long> missingProductsId = List.of(1L, 2L, 3L);
-        String expectedMessage = "We can't find products with id = 1, 2, 3";
+        String expectedMessage = "There are missing products with id = 1, 2, 3";
 
         //When
         ProductsNotFoundException exception = new ProductsNotFoundException(missingProductsId);

@@ -1,7 +1,7 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.mappers;
 
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +13,8 @@ public class MapperFacade {
 
     private final OrderMapper orderMapper;
 
-    public Order mapOrderRequestDTOToOrderEntity(OrderRequestDTO orderRequestDTO){
-        return orderMapper.mapOrderRequestDTOToOrderEntity(orderRequestDTO);
+    public Order mapOrderRequestDTOToOrderEntity(CreateOrderRequestDTO createOrderRequestDto){
+        return orderMapper.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
     }
 
     public OrderResponseDTO mapOrderToOrderResponseDTO(Order order){

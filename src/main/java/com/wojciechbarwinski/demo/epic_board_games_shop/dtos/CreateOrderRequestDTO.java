@@ -4,17 +4,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderRequestDTO {
+public class CreateOrderRequestDTO {
 
     private String ordererMail;
 
     private AddressDTO addressToSend;
 
-    private List<OrderLineDTO> orderLineDTOs;
+    private List<OrderLineDTO> orderLineDTOs = new ArrayList<>();
 
 }

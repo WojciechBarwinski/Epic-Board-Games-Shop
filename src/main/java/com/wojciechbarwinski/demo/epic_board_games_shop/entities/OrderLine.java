@@ -12,6 +12,7 @@ import lombok.Data;
 public class OrderLine {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,6 +24,7 @@ public class OrderLine {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @Column(name = "quantity")
     private int quantity;
 
 }

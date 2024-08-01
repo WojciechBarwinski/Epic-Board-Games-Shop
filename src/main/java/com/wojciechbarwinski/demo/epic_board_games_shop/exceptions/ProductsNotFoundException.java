@@ -13,7 +13,7 @@ public class ProductsNotFoundException extends ApplicationException {
     }
 
     private static String generateMessage(Collection<Long> missingProductsId) {
-        return "We can't find products with id = " +
+        return "There are missing products with id = " +
                 missingProductsId.stream()
                         .map(String::valueOf)
                         .collect(Collectors.joining(", "));

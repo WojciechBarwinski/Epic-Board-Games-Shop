@@ -32,7 +32,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     private List<SimpleGrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
-        log.trace("Map roles to SimpleGrantedAuthority");
         return roles.stream().map(role -> new SimpleGrantedAuthority(
                 role.name())).toList();
     }

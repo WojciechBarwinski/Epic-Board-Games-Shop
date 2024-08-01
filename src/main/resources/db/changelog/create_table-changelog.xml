@@ -78,9 +78,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-    </changeSet>
 
-    <changeSet id="2" author="Wojtek B">
         <addForeignKeyConstraint baseTableName="orders"
                                  baseColumnNames="address"
                                  constraintName="fk_orders_address"

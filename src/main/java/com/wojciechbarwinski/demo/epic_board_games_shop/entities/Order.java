@@ -14,17 +14,21 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "orders")
-@EqualsAndHashCode(of = {"id", "ordererMail", "employeeId"})
+@EqualsAndHashCode
 public class Order {
 
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
 
+    @Column(name = "orderer_mail")
     private String ordererMail;
 
+    @Column(name = "employee_id")
     private String employeeId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
