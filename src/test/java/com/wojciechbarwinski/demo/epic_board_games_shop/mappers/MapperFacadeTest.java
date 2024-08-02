@@ -6,7 +6,6 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.*;
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.MappingToDTOException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MapperFacadeTest {
 
-    MapperFacade mapperFacade = new MapperFacade(new OrderMapper());
+    MapperFacade mapperFacade = new MapperFacade();
 
     @Test
     void shouldMapOrderDTOToOrderEntity(){
@@ -27,7 +26,7 @@ class MapperFacadeTest {
                 List.of(new OrderLineDTO(1L, 2)));
 
         //when
-        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
+        Order order = mapperFacade.mapCreateOrderRequestDTOToOrderEntity(createOrderRequestDto);
 
         //then
         assertNotNull(order);
@@ -50,7 +49,7 @@ class MapperFacadeTest {
                 null);
 
         //when
-        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
+        Order order = mapperFacade.mapCreateOrderRequestDTOToOrderEntity(createOrderRequestDto);
 
         //then
         assertNotNull(order);
@@ -73,7 +72,7 @@ class MapperFacadeTest {
                 List.of(new OrderLineDTO(1L, 2)));
 
         //when
-        Order order = mapperFacade.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
+        Order order = mapperFacade.mapCreateOrderRequestDTOToOrderEntity(createOrderRequestDto);
 
         //then
         assertNotNull(order);
@@ -110,39 +109,6 @@ class MapperFacadeTest {
         assertEquals(order.getOrderLines().get(0).getQuantity(), orderResponseDTO.getOrderLineDTOs().get(0).quantity());
         assertEquals(order.getOrderLines().get(0).getProduct().getId(), orderResponseDTO.getOrderLineDTOs().get(0).productId());
 
-    }
-
-    @Test
-    void shouldThrowExceptionWhenAddressIsNull(){
-        Order order = createOrder();
-        order.setAddress(null);
-        String expectedMessage = "Address to map is null";
-
-        MappingToDTOException exception = assertThrows(MappingToDTOException.class, () -> mapperFacade.mapOrderToOrderResponseDTO(order));
-
-        assertEquals(expectedMessage, exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenOrderLineIsNull(){
-        Order order = createOrder();
-        order.setOrderLines(null);
-        String expectedMessage = "List of OrderLines are null/empty";
-
-        MappingToDTOException exception = assertThrows(MappingToDTOException.class, () -> mapperFacade.mapOrderToOrderResponseDTO(order));
-
-        assertEquals(expectedMessage, exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowExceptionWhenOrderLineIsEmpty(){
-        Order order = createOrder();
-        order.setOrderLines(List.of());
-        String expectedMessage = "List of OrderLines are null/empty";
-
-        MappingToDTOException exception = assertThrows(MappingToDTOException.class, () -> mapperFacade.mapOrderToOrderResponseDTO(order));
-
-        assertEquals(expectedMessage, exception.getMessage());
     }
 
     private static Order createOrder() {

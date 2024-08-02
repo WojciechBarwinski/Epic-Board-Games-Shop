@@ -7,17 +7,14 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
 public class MapperFacade {
 
-    private final OrderMapper orderMapper;
-
-    public Order mapOrderRequestDTOToOrderEntity(CreateOrderRequestDTO createOrderRequestDto){
-        return orderMapper.mapOrderRequestDTOToOrderEntity(createOrderRequestDto);
+    public Order mapCreateOrderRequestDTOToOrderEntity(CreateOrderRequestDTO createOrderRequestDto){
+        return OrderMapperTest.INSTANCE.mapCreateOrderRequestDTOToOrder(createOrderRequestDto);
     }
 
     public OrderResponseDTO mapOrderToOrderResponseDTO(Order order){
-        return orderMapper.mapOrderToOrderResponseDTO(order);
+        return OrderMapperTest.INSTANCE.mapOrderToResponseOrderDTO(order);
     }
 }

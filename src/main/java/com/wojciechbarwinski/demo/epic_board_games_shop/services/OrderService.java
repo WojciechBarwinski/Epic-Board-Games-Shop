@@ -21,7 +21,7 @@ public class OrderService {
     OrderResponseDTO processOrder(CreateOrderRequestDTO createOrderRequestDto) {
 
         Order order = orderHelper.prepareOrderToSave(createOrderRequestDto,
-                mapper.mapOrderRequestDTOToOrderEntity(createOrderRequestDto));
+                mapper.mapCreateOrderRequestDTOToOrderEntity(createOrderRequestDto));
 
         Order orderAfterSave = orderRepository.save(order);
 

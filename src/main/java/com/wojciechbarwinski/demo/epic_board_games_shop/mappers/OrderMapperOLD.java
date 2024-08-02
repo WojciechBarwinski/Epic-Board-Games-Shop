@@ -16,7 +16,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-class OrderMapper {
+class OrderMapperOLD {
 
 
     Order mapOrderRequestDTOToOrderEntity(CreateOrderRequestDTO createOrderRequestDto) {

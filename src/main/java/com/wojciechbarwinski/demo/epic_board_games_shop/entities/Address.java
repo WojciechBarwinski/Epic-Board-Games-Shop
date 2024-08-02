@@ -2,9 +2,10 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.entities;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 @Builder
 @Entity
 @Table(name = "address")

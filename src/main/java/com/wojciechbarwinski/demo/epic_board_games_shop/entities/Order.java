@@ -13,8 +13,8 @@ import java.util.List;
 @Setter
 @Builder
 @Entity
-@Table(name = "orders")
 @EqualsAndHashCode
+@Table(name = "orders")
 public class Order {
 
     @Id
