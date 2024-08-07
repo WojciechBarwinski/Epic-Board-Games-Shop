@@ -9,7 +9,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InsufficientStockException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
-import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationComponent;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -26,13 +26,13 @@ import java.util.stream.Collectors;
 public class OrderServiceHelper {
 
     private final ProductRepository productRepository;
-    private final AuthenticationComponent authenticationComponent;
+    private final AuthenticationHelper authenticationHelper;
 
     Order prepareOrderToSave(CreateOrderRequestDTO orderDTO, Order order) {
 
         order.setOrderLines(getOrderLinesFromOrderDTO(orderDTO.getOrderLineDTOs(), order));
         order.setTotalPrice(getTotalOrderPrice(order.getOrderLines()));
-        order.setEmployeeId(authenticationComponent.getSellerId());
+        order.setEmployeeId(authenticationHelper.getSellerId());
         order.setOrderStatus(OrderStatus.PLACED);
 
         return order;

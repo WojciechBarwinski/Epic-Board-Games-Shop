@@ -10,7 +10,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InsufficientStockException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
-import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationComponent;
+import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationHelper;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class OrderServiceHelperTest {
     private ProductRepository productRepository;
 
     @Mock
-    private AuthenticationComponent authenticationComponent;
+    private AuthenticationHelper authenticationHelper;
 
     @InjectMocks
     private OrderServiceHelper orderHelper;
@@ -53,7 +53,7 @@ class OrderServiceHelperTest {
         String employeeId = "username@mail";
         BigDecimal expectedTotalPrice = BigDecimal.valueOf(175); // 2 x 50 and 3 x 25 look into createProductsListForMock
 
-        when(authenticationComponent.getSellerId()).thenReturn(employeeId);
+        when(authenticationHelper.getSellerId()).thenReturn(employeeId);
         when(productRepository.findAllById(Mockito.any())).thenReturn(createProductsListForMock());
 
         //when
@@ -76,7 +76,7 @@ class OrderServiceHelperTest {
         Order order = createOrderInStageAfterMapping();
         String expectedMessage = "No authenticated user found.";
 
-        when(authenticationComponent.getSellerId()).thenThrow(new InvalidSellerException());
+        when(authenticationHelper.getSellerId()).thenThrow(new InvalidSellerException());
         when(productRepository.findAllById(Mockito.any())).thenReturn(createProductsListForMock());
 
         //when

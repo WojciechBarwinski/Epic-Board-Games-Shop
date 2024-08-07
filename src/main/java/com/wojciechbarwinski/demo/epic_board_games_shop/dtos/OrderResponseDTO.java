@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -26,5 +27,5 @@ public class OrderResponseDTO {
 
     private String status;
 
-    private List<OrderLineDTO> orderLineDTOs;
+    private List<OrderLineDTO> orderLineDTOs = new ArrayList<>();
 }

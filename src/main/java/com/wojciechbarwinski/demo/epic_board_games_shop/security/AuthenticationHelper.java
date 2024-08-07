@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class AuthenticationComponent {
+public class AuthenticationHelper {
 
     public String getSellerId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
