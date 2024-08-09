@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
   epic_board_games_shop_mysql:
@@ -8,9 +8,20 @@ services:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: epic_board_games_shop_db
     volumes:
-      - mysql_volumes:/var/lib/mysql
+      - mysql_epic_board_games_shop_volumes:/var/lib/mysql
     ports:
       - "3306:3306"
+
+  epic_board_games_shop_test_mysql:
+    image: mysql
+    container_name: mysql_test_epic_board_games_shop
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: epic_board_games_shop_test_db
+    volumes:
+     - mysql_epic_board_games_shop_test_volumes:/var/lib/mysql
+    ports:
+     - "3307:3306"
 
   legendary_warehouse:
     image: legendary-warehouse:latest
@@ -19,5 +30,7 @@ services:
       - "8081:8081"
 
 volumes:
-  mysql_volumes:
+  mysql_epic_board_games_shop_volumes:
+    driver: local
+  mysql_epic_board_games_shop_test_volumes:
     driver: local

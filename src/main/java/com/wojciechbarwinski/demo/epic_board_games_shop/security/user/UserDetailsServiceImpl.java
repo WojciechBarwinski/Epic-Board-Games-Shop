@@ -1,6 +1,7 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.security.user;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -19,9 +21,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+                .orElseThrow(() -> {
+                    log.warn("User with username '{}' not found", username);
+                    return new UsernameNotFoundException("Incorrect login or password");
+                });
 
-        return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        return new User(user.getUsername(),
+                user.getPassword(),
+                mapRolesToAuthorities(user.getRoles()));
     }
 
     private List<SimpleGrantedAuthority> mapRolesToAuthorities(List<Role> roles) {

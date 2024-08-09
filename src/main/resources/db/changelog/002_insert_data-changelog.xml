@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <changeSet id="2" author="Wojtek B">
+        <insert tableName="product">
+            <column name="name" value="Gloomheaven"/>
+            <column name="price" value="525.50"/>
+            <column name="quantity" value="10"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Tainted Grail"/>
+            <column name="price" value="222.99"/>
+            <column name="quantity" value="8"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="The Old World: Tomb Guards"/>
+            <column name="price" value="200.00"/>
+            <column name="quantity" value="5"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="Red dices set"/>
+            <column name="price" value="45.50"/>
+            <column name="quantity" value="11"/>
+        </insert>
+        <insert tableName="product">
+            <column name="name" value="small Paintbrush"/>
+            <column name="price" value="30.00"/>
+            <column name="quantity" value="15"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
