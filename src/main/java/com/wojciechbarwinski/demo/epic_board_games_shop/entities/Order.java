@@ -1,19 +1,18 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.entities;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = {"orderLines", "address"})
+@EqualsAndHashCode(exclude = "orderLines")
 @Entity
-@EqualsAndHashCode
 @Table(name = "orders")
 public class Order {
 

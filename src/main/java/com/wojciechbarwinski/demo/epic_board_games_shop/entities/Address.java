@@ -1,11 +1,15 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @Builder
+@RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "address")
 public class Address {
