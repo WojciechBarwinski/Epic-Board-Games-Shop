@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username)
                 .orElseThrow(() -> {
-                    log.warn("User with username '{}' not found", username);
+                    log.warn("User not found");
                     return new UsernameNotFoundException("Incorrect login or password");
                 });
 
