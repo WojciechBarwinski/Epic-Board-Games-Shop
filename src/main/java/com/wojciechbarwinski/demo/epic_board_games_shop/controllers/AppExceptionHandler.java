@@ -69,6 +69,6 @@ public class AppExceptionHandler {
                     error.getRejectedValue()));
         }
 
-        return new ErrorResponse<>("Result of validate", errors);
+        return new ErrorResponse<>("Validation errors", errors);
     }
 }

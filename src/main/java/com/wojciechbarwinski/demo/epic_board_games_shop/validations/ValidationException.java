@@ -11,7 +11,7 @@ public class ValidationException extends ApplicationException {
     private final List<ValidationError> errors;
 
     public ValidationException(List<ValidationError> errors) {
-        super("Result of validation");
+        super("Validation errors");
         this.errors = errors;
     }
 }

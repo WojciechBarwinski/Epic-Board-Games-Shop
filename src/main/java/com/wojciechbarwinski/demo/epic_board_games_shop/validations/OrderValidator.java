@@ -29,12 +29,12 @@ public class OrderValidator {
 
         if (productById == null) {
             errors.add(new ValidationError(
-                    "product Id",
+                    "orderLineDTO.productId",
                     "There is no product with this id",
                     orderLineDTO.productId()));
         } else if (productById.getQuantity() <= orderLineDTO.quantity()) {
             errors.add(new ValidationError(
-                    "product quantity",
+                    "orderLineDTO.quantity",
                     String.format("There is insufficient quantity for product with id %d", productId),
                     String.format("Ordered quantity = %d, current quantity = %d", orderLineDTO.quantity(), productById.getQuantity())));
         }
