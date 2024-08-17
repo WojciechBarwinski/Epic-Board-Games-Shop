@@ -16,6 +16,6 @@ public record AddressDTO(
         String zipCode,
 
         @NotBlank(message = "Phone number is required")
-        @Pattern(regexp = "\\d{9}", message = "Invalid phone number format. Expected format is XXXXXXXXX")
+        @Pattern(regexp = "\\d{9}", message = "Invalid phone number format. Expected format is XXXXXXXXX") //this is just example and simple regex. For real purpose it should be much more specified.
         String phoneNumber) {
 }

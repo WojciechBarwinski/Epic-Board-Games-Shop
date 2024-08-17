@@ -70,7 +70,6 @@
 			<version>0.11.5</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-gson</artifactId>
@@ -89,7 +88,6 @@
 			<version>1.18.34</version>
 			<scope>provided</scope>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -123,13 +121,18 @@
 			<version>0.2.0</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>8.0.1.Final</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<version>2.2</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.wojciechbarwinski.demo.epic_board_games_shop.validations.ValidationErrorMatcher.matchesValidationError;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -32,17 +34,14 @@ class OrderValidatorTest {
         ValidationException validationException = assertThrows(ValidationException.class,
                 () -> validator.validateOrderLineDTOS(orderLineDTOs, productsFromDB));
 
-        //then //TODO is there enough lines to use TypeSafeMatcher instead??
+        //then
         assertEquals(expectedErrors, validationException.getErrors().size());
+        assertThat(validationException.getErrors().get(0),
+                matchesValidationError("orderLineDTO.productId", "There is no product with this id", 9L));
+        assertThat(validationException.getErrors().get(1),
+                matchesValidationError("orderLineDTO.quantity", "There is insufficient quantity for product with id 2",
+                        new OrderLineQuantityValidationRejectedValueDTO(10, 5)));
 
-        assertEquals("Result of validation", validationException.getMessage());
-        assertEquals("product Id", validationException.getErrors().get(0).getFieldName());
-        assertEquals("There is no product with this id", validationException.getErrors().get(0).getMessage());
-        assertEquals(9L, validationException.getErrors().get(0).getRejectedValue());
-
-        assertEquals("product quantity", validationException.getErrors().get(1).getFieldName());
-        assertEquals("There is insufficient quantity for product with id 2", validationException.getErrors().get(1).getMessage());
-        assertEquals("Ordered quantity = 10, current quantity = 5", validationException.getErrors().get(1).getRejectedValue());
     }
 
     private static Map<Long, Product> createMapOfProductForTest() {

@@ -36,7 +36,7 @@ public class OrderValidator {
             errors.add(new ValidationError(
                     "orderLineDTO.quantity",
                     String.format("There is insufficient quantity for product with id %d", productId),
-                    String.format("Ordered quantity = %d, current quantity = %d", orderLineDTO.quantity(), productById.getQuantity())));
+                    new OrderLineQuantityValidationRejectedValueDTO(orderLineDTO.quantity(), productById.getQuantity())));
         }
     }
 }
