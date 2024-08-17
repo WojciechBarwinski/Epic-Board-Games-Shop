@@ -1,8 +1,7 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.repositories;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequest;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.SortValue;
-import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Address;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.SortDirection;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -21,10 +21,10 @@ public class OrderCriteriaQueryRepositoryImpl implements OrderCriteriaQueryRepos
 
 
     @Override
-    public List<Order> findOrdersBySearchRequest(OrderSearchRequest orderSearchRequest) {
+    public List<Order> findOrdersBySearchRequest(OrderSearchRequestDTO orderSearchRequestDTO) {
 
-        int page = orderSearchRequest.getPage();
-        int size = orderSearchRequest.getSize();
+        int page = orderSearchRequestDTO.getPage();
+        int size = orderSearchRequestDTO.getSize();
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Order> query = criteriaBuilder.createQuery(Order.class);
@@ -32,10 +32,10 @@ public class OrderCriteriaQueryRepositoryImpl implements OrderCriteriaQueryRepos
 
         orderRoot.join("address", JoinType.LEFT);
 
-        List<Predicate> predicates = buildPredicates(orderSearchRequest, criteriaBuilder, orderRoot);
+        List<Predicate> predicates = buildPredicates(orderSearchRequestDTO, criteriaBuilder, orderRoot);
         query.where(predicates.toArray(new Predicate[0]));
 
-        List<jakarta.persistence.criteria.Order> sortOrders = buildSortOrders(orderSearchRequest, criteriaBuilder, orderRoot);
+        List<jakarta.persistence.criteria.Order> sortOrders = buildSortOrders(orderSearchRequestDTO, criteriaBuilder, orderRoot);
         query.orderBy(sortOrders);
 
         TypedQuery<Order> typedQuery = em.createQuery(query);
@@ -46,24 +46,42 @@ public class OrderCriteriaQueryRepositoryImpl implements OrderCriteriaQueryRepos
     }
 
 
-    private List<Predicate> buildPredicates(OrderSearchRequest searchDTO, CriteriaBuilder cb, Root<Order> root) {
+    private List<Predicate> buildPredicates(OrderSearchRequestDTO searchDTO, CriteriaBuilder cb, Root<Order> root) {
         List<Predicate> predicates = new ArrayList<>();
+        if (searchDTO.getFilters().isEmpty()){
+            return predicates;
+        }
 
-        if (!searchDTO.getFieldToFilter().isBlank() && !searchDTO.getFieldFilterValue().isBlank()) {
-            predicates.add(cb.equal(root.get(searchDTO.getFieldToFilter()), searchDTO.getFieldFilterValue()));
+        Map<String, String> filters = searchDTO.getFilters();
+
+        for (Map.Entry<String, String> entry : filters.entrySet()) {
+            String fieldName = entry.getKey();
+            String value = entry.getKey();
+
+            if (!value.isBlank()) {
+                predicates.add(cb.equal(root.get(fieldName), value));
+            }
         }
 
         return predicates;
     }
 
-    private List<jakarta.persistence.criteria.Order> buildSortOrders(OrderSearchRequest searchDTO, CriteriaBuilder cb, Root<Order> root) {
+    private List<jakarta.persistence.criteria.Order> buildSortOrders(OrderSearchRequestDTO searchDTO, CriteriaBuilder cb, Root<Order> root) {
         List<jakarta.persistence.criteria.Order> orders = new ArrayList<>();
+        if (searchDTO.getSorts().isEmpty()){
+            return orders;
+        }
 
-        for (SortValue sortValue : searchDTO.getSortValues()) {
-            if ("asc".equalsIgnoreCase(sortValue.direction())) {
-                orders.add(cb.asc(root.get(sortValue.field())));
-            } else if ("desc".equalsIgnoreCase(sortValue.direction())) {
-                orders.add(cb.desc(root.get(sortValue.field())));
+        Map<String, SortDirection> sorts = searchDTO.getSorts();
+
+        for (Map.Entry<String, SortDirection> entry : sorts.entrySet()) {
+            String field = entry.getKey();
+            SortDirection direction = entry.getValue();
+
+            if (SortDirection.ASC.equals(direction)) {
+                orders.add(cb.asc(root.get(field)));
+            } else if (SortDirection.DESC.equals(direction)) {
+                orders.add(cb.desc(root.get(field)));
             }
         }
 

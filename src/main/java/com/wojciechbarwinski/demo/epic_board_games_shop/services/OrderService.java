@@ -2,7 +2,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.services;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequest;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
@@ -31,9 +31,9 @@ public class OrderService {
         return mapper.mapOrderToOrderResponseDTO(orderAfterSave);
     }
 
-    public List<OrderResponseDTO> getAllOrdersBySearchingData(OrderSearchRequest orderSearchRequest) {
+    public List<OrderResponseDTO> getAllOrdersBySearchingData(OrderSearchRequestDTO orderSearchRequestDTO) {
 
-        List<Order> ordersBySearchRequest = orderRepository.findOrdersBySearchRequest(orderSearchRequest);
+        List<Order> ordersBySearchRequest = orderRepository.findOrdersBySearchRequest(orderSearchRequestDTO);
 
         return ordersBySearchRequest.stream()
                 .map(mapper::mapOrderToOrderResponseDTO)

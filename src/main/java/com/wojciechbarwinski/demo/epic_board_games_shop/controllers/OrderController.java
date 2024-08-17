@@ -2,16 +2,18 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.controllers;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequest;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.SortDirection;
 import com.wojciechbarwinski.demo.epic_board_games_shop.services.OrderServiceFacade;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -29,10 +31,20 @@ public class OrderController {
         return orderServiceFacade.orderProceed(createOrderRequestDto);
     }
 
-    @PostMapping("/orders")
-    List<OrderResponseDTO> getOrdersBySearchingData(@RequestBody OrderSearchRequest orderSearchRequest) {
+    @GetMapping("/orders")
+    List<OrderResponseDTO> getOrdersBySearchingData(@RequestParam int page,
+                                                    @RequestParam int size,
+                                                    @RequestParam Map<String, String> filters,
+                                                    @RequestParam Map<String, SortDirection> sorts) {
 
-        return orderServiceFacade.getAllOrdersBySearchingData(orderSearchRequest);
+        throwExceptionIfPageOrSizeHasNegativeValue(page, size);
+
+        return orderServiceFacade.getAllOrdersBySearchingData(new OrderSearchRequestDTO(page, size, filters, sorts));
     }
 
+    private void throwExceptionIfPageOrSizeHasNegativeValue(int page, int size) {
+        if (page < 0 || size < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page and size must be non-negative");
+        }
+    }
 }
