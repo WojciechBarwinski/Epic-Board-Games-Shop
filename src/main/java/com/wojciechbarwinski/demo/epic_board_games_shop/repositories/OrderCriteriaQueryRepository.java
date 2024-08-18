@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OrderCriteriaQueryRepository {
 
-    List<Order> findOrdersBySearchRequest(OrderSearchRequestDTO orderSearchRequestDTO);
+    List<Order> findOrdersBySearchRequest(OrderSearchRequestDTO test);
 }
