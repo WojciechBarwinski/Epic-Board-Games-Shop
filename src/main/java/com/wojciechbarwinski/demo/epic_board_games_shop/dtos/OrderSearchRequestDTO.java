@@ -7,7 +7,6 @@ import lombok.Data;
 import java.util.List;
 
 @Builder
-@AllArgsConstructor
 @Data
 public class OrderSearchRequestDTO {
 

@@ -41,6 +41,8 @@ public class OrderController {
                                 @RequestParam(value = "street", required = false) List<String> street,
                                 @RequestParam(value = "sellerMail", required = false) List<String> sellerMail) {
 
+        throwExceptionIfPageOrSizeHasNegativeValue(page, size);
+
         OrderSearchRequestDTO build = OrderSearchRequestDTO.builder()
                 .page(page)
                 .size(size)
@@ -53,8 +55,6 @@ public class OrderController {
                 .street(street)
                 .sellerMail(sellerMail)
                 .build();
-
-        throwExceptionIfPageOrSizeHasNegativeValue(page, size);
 
         return orderServiceFacade.getAllOrdersBySearchingData(build);
     }
