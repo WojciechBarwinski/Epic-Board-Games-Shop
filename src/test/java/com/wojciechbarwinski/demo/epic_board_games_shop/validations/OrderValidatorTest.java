@@ -20,12 +20,11 @@ class OrderValidatorTest {
 
 
     @Test
-    void shouldThrowExceptionWithListOfValidationErrors() {
+    void shouldThrowExceptionWithListOfValidationErrorsWhenProductIdIsIncorrect() {
         //given
-        int expectedErrors = 2;
+        int expectedErrors = 1;
         List<OrderLineDTO> orderLineDTOs = List.of(
                 new OrderLineDTO(9L, 3), // wrong product ID
-                new OrderLineDTO(2L, 10), // wrong product quantity
                 new OrderLineDTO(3L, 2) // correct OrderLine
         );
         Map<Long, Product> productsFromDB = createMapOfProductForTest();
@@ -38,7 +37,26 @@ class OrderValidatorTest {
         assertEquals(expectedErrors, validationException.getErrors().size());
         assertThat(validationException.getErrors().get(0),
                 matchesValidationError("orderLineDTO.productId", "There is no product with this id", 9L));
-        assertThat(validationException.getErrors().get(1),
+
+    }
+
+    @Test
+    void shouldThrowExceptionWithListOfValidationErrorsWhenProductQuantityIsIncorrect() {
+        //given
+        int expectedErrors = 1;
+        List<OrderLineDTO> orderLineDTOs = List.of(
+                new OrderLineDTO(2L, 10), // wrong product quantity
+                new OrderLineDTO(3L, 2) // correct OrderLine
+        );
+        Map<Long, Product> productsFromDB = createMapOfProductForTest();
+
+        //when
+        ValidationException validationException = assertThrows(ValidationException.class,
+                () -> validator.validateOrderLineDTOS(orderLineDTOs, productsFromDB));
+
+        //then
+        assertEquals(expectedErrors, validationException.getErrors().size());
+        assertThat(validationException.getErrors().get(0),
                 matchesValidationError("orderLineDTO.quantity", "There is insufficient quantity for product with id 2",
                         new OrderLineQuantityValidationRejectedValueDTO(10, 5)));
 
