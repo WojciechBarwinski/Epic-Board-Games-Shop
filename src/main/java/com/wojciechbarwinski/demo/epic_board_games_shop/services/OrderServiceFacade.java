@@ -14,4 +14,8 @@ public class OrderServiceFacade {
     public OrderResponseDTO orderProceed(CreateOrderRequestDTO createOrderRequestDto) {
         return orderService.processOrder(createOrderRequestDto);
     }
+
+    public OrderResponseDTO getOrderById(Long id) {
+        return orderService.getOrderById(id);
+    }
 }

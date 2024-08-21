@@ -3,6 +3,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.services;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
+import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.OrderNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,4 +29,9 @@ public class OrderService {
         return mapper.mapOrderToOrderResponseDTO(orderAfterSave);
     }
 
+    public OrderResponseDTO getOrderById(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id.toString()));
+        return mapper.mapOrderToOrderResponseDTO(order);
+    }
 }
