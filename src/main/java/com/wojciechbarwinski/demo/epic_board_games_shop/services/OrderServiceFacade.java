@@ -20,7 +20,7 @@ public class OrderServiceFacade {
 
 
     public OrderResponseDTO getOrderById(Long id) {
-        return orderService.getOrderById(id);
+        return orderService.getOrderById(id);}
 
     public List<OrderResponseDTO> getAllOrdersBySearchingData(OrderSearchRequestDTO orderSearchRequestDTO) {
         return orderService.getAllOrdersBySearchingData(orderSearchRequestDTO);
