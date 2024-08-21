@@ -18,7 +18,12 @@ public class OrderServiceFacade {
         return orderService.processOrder(createOrderRequestDto);
     }
 
+
+    public OrderResponseDTO getOrderById(Long id) {
+        return orderService.getOrderById(id);}
+
     public List<OrderResponseDTO> getAllOrdersBySearchingData(OrderSearchRequestDTO orderSearchRequestDTO) {
         return orderService.getAllOrdersBySearchingData(orderSearchRequestDTO);
+
     }
 }

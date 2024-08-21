@@ -4,6 +4,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestD
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
+import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.OrderNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,12 @@ public class OrderService {
         Order orderAfterSave = orderRepository.save(order);
 
         return mapper.mapOrderToOrderResponseDTO(orderAfterSave);
+    }
+
+    public OrderResponseDTO getOrderById(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(() -> new OrderNotFoundException(id));
+        return mapper.mapOrderToOrderResponseDTO(order);
     }
 
     public List<OrderResponseDTO> getAllOrdersBySearchingData(OrderSearchRequestDTO orderSearchRequestDTO) {
