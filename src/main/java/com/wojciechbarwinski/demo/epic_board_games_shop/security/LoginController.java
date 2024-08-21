@@ -30,8 +30,6 @@ public class LoginController {
     @PostMapping("login")
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDto) {
 
-        log.debug("Start login user");
-
         throwExceptionIfThereIsNoLoginData(loginDto);
 
         try {
@@ -46,7 +44,7 @@ public class LoginController {
             return new ResponseEntity<>(token, HttpStatus.OK);
 
         } catch (Exception e) {
-            log.warn("Login attempt failed for user '{}': {}", loginDto.username(), e.getMessage());
+            log.warn("Login attempt failed for user");
             throw new InvalidLoginException();
         }
     }

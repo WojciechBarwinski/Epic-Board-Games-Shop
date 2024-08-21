@@ -6,12 +6,19 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.MappingToDTOE
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.MissingCredentialsException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.ApplicationSecurityException;
+import com.wojciechbarwinski.demo.epic_board_games_shop.validations.ValidationError;
+import com.wojciechbarwinski.demo.epic_board_games_shop.validations.ValidationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@ControllerAdvice
+import java.util.ArrayList;
+import java.util.List;
+
+@RestControllerAdvice
 public class AppExceptionHandler {
 
 
@@ -41,5 +48,27 @@ public class AppExceptionHandler {
     public ErrorResponse<String> mappingToDTOException(MappingToDTOException exception) {
 
         return new ErrorResponse<>(exception.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ValidationException.class)
+    public ErrorResponse<List<ValidationError>> validationException(ValidationException exception) {
+
+        return new ErrorResponse<>(exception.getMessage(), exception.getErrors());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorResponse<List<ValidationError>> handleValidationExceptions(MethodArgumentNotValidException exception) {
+        List<ValidationError> errors = new ArrayList<>();
+
+        for (FieldError error : exception.getBindingResult().getFieldErrors()) {
+            errors.add(new ValidationError(
+                    error.getField(),
+                    error.getDefaultMessage(),
+                    error.getRejectedValue()));
+        }
+
+        return new ErrorResponse<>("Validation errors", errors);
     }
 }
