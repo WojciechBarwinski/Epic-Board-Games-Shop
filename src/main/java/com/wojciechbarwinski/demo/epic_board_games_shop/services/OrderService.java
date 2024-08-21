@@ -31,7 +31,7 @@ public class OrderService {
 
     public OrderResponseDTO getOrderById(Long id) {
         Order order = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException(id.toString()));
+                .orElseThrow(() -> new OrderNotFoundException(id));
         return mapper.mapOrderToOrderResponseDTO(order);
     }
 }
