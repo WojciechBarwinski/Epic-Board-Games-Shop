@@ -7,11 +7,10 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Address;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.InsufficientStockException;
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationHelper;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
+import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +35,9 @@ class OrderServiceHelperTest {
 
     @Mock
     private AuthenticationHelper authenticationHelper;
+
+    @Mock
+    private OrderValidator validator;
 
     @InjectMocks
     private OrderServiceHelper orderHelper;
@@ -81,42 +83,6 @@ class OrderServiceHelperTest {
 
         //when
         InvalidSellerException exception = assertThrows(InvalidSellerException.class,
-                () -> orderHelper.prepareOrderToSave(orderDTO, order));
-
-        //then
-        assertEquals(expectedMessage, exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowExceptionBecauseInOrderThereIsProductIdWithIsNotInDB() {
-        //given
-        Long incorrectId = 4L; //more than 3
-        CreateOrderRequestDTO orderDTO = createOrderRequestDTOWithIncorrectProductId(incorrectId);
-        Order order = createOrderInStageAfterMapping();
-        String expectedMessage = "There are missing products with id = " + incorrectId;
-
-        when(productRepository.findAllById(Mockito.any())).thenReturn(createProductsListForMock());
-
-        //when
-        ProductsNotFoundException exception = assertThrows(ProductsNotFoundException.class,
-                () -> orderHelper.prepareOrderToSave(orderDTO, order));
-
-        //then
-        assertEquals(expectedMessage, exception.getMessage());
-    }
-
-    @Test
-    void shouldThrowExceptionBecauseInOrderThereIsWrongQuantity() {
-        //given
-        OrderLineDTO orderLineWithWrongQuantity = new OrderLineDTO(3L, 100);
-        CreateOrderRequestDTO orderDTO = createOrderRequestDTOWithWrongQuantity(orderLineWithWrongQuantity);
-        Order order = createOrderInStageAfterMapping();
-        String expectedMessage = "There is incorrect data about stock of this items = 3";
-
-        when(productRepository.findAllById(Mockito.any())).thenReturn(createProductsListForMock());
-
-        //when
-        InsufficientStockException exception = assertThrows(InsufficientStockException.class,
                 () -> orderHelper.prepareOrderToSave(orderDTO, order));
 
         //then
