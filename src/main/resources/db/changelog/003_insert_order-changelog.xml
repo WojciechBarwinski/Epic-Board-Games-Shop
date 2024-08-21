@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+
+    <changeSet id="3" author="Wojtek B">
+
+        <insert tableName="address">
+            <column name="street" value="Main Street 123"/>
+            <column name="city" value="Warszawa"/>
+            <column name="zip_code" value="00-001"/>
+            <column name="phone_number" value="123456789"/>
+        </insert>
+        <insert tableName="address">
+            <column name="street" value="Another Street 123"/>
+            <column name="city" value="Lodz"/>
+            <column name="zip_code" value="00-999"/>
+            <column name="phone_number" value="987654321"/>
+        </insert>
+
+        <!-- Order 1 -->
+        <insert tableName="orders">
+            <column name="total_price" value="585.52"/>
+            <column name="orderer_mail" value="klient1@example.com"/>
+            <column name="employee_id" value="owner@mail.com"/>
+            <column name="address" value="1"/>
+            <column name="order_status" value="CONFIRMED"/>
+        </insert>
+        <insert tableName="order_line">
+            <column name="order_id" value="1"/>
+            <column name="product_id" value="5"/>
+            <column name="quantity" value="2"/>
+        </insert>
+        <insert tableName="order_line">
+            <column name="order_id" value="1"/>
+            <column name="product_id" value="1"/>
+            <column name="quantity" value="1"/>
+        </insert>
+        <!-- Order 2 -->
+        <insert tableName="orders">
+            <column name="total_price" value="230"/>
+            <column name="orderer_mail" value="klient2@example.com"/>
+            <column name="employee_id" value="owner@mail.com"/>
+            <column name="address" value="1"/>
+            <column name="order_status" value="CONFIRMED"/>
+        </insert>
+        <insert tableName="order_line">
+            <column name="order_id" value="2"/>
+            <column name="product_id" value="3"/>
+            <column name="quantity" value="1"/>
+        </insert>
+        <insert tableName="order_line">
+            <column name="order_id" value="2"/>
+            <column name="product_id" value="5"/>
+            <column name="quantity" value="1"/>
+        </insert>
+        <!-- Order 3 -->
+        <insert tableName="orders">
+            <column name="total_price" value="525.50"/>
+            <column name="orderer_mail" value="klient2@example.com"/>
+            <column name="employee_id" value="seller@mail.com"/>
+            <column name="address" value="2"/>
+            <column name="order_status" value="CONFIRMED"/>
+        </insert>
+        <insert tableName="order_line">
+            <column name="order_id" value="3"/>
+            <column name="product_id" value="1"/>
+            <column name="quantity" value="1"/>
+        </insert>
+        <!-- Order 4 -->
+        <insert tableName="orders">
+            <column name="total_price" value="525.50"/>
+            <column name="orderer_mail" value="klient2@example.com"/>
+            <column name="employee_id" value="seller@mail.com"/>
+            <column name="address" value="2"/>
+            <column name="order_status" value="PLACED"/>
+        </insert>
+        <insert tableName="order_line">
+            <column name="order_id" value="4"/>
+            <column name="product_id" value="1"/>
+            <column name="quantity" value="1"/>
+        </insert>
+        <!-- Order 5 -->
+        <insert tableName="orders">
+            <column name="total_price" value="525.50"/>
+            <column name="orderer_mail" value="klient3@example.com"/>
+            <column name="employee_id" value="owner@mail.com"/>
+            <column name="address" value="1"/>
+            <column name="order_status" value="PLACED"/>
+        </insert>
+        <insert tableName="order_line">
+            <column name="order_id" value="5"/>
+            <column name="product_id" value="1"/>
+            <column name="quantity" value="1"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
