@@ -8,7 +8,7 @@
 
     <include file="db/changelog/001_create_table-changelog.xml"/>
     <include file="db/changelog/002_insert_data-changelog.xml"/>
-    <include file="db/changelog/003_insert_Order-changelog.xml"/>
+    <include file="db/changelog/003_insert_order-changelog.xml"/>
 
 
 
