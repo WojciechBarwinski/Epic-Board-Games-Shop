@@ -106,8 +106,8 @@ class MapperFacadeTest {
         assertEquals(order.getAddress().getZipCode() , orderResponseDTO.getAddressToSend().zipCode());
         assertEquals(order.getAddress().getPhoneNumber() , orderResponseDTO.getAddressToSend().phoneNumber());
         assertEquals(1, order.getOrderLines().size());
-        assertEquals(order.getOrderLines().get(0).getQuantity(), orderResponseDTO.getOrderLineDTOs().get(0).quantity());
-        assertEquals(order.getOrderLines().get(0).getProduct().getId(), orderResponseDTO.getOrderLineDTOs().get(0).productId());
+        assertEquals(order.getOrderLines().get(0).getQuantity(), orderResponseDTO.getOrderLineDTOS().get(0).quantity());
+        assertEquals(order.getOrderLines().get(0).getProduct().getId(), orderResponseDTO.getOrderLineDTOS().get(0).productId());
 
     }
 

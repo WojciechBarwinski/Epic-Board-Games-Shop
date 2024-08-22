@@ -11,7 +11,6 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepo
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationHelper;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderValidator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderServiceHelperTest {
+class OrderCreateServiceHelperTest {
 
 
     @Mock
@@ -40,12 +39,7 @@ class OrderServiceHelperTest {
     private OrderValidator validator;
 
     @InjectMocks
-    private OrderServiceHelper orderHelper;
-
-    @BeforeEach
-    void setUp() {
-    }
-
+    private OrderCreateServiceHelper orderHelper;
 
     @Test
     void shouldPrepareOrderFromOrderDTOToSave() {
@@ -73,7 +67,6 @@ class OrderServiceHelperTest {
     @Test
     void shouldThrowExceptionBecauseThereIsNoAuthUserWhenOrderIsPlace() {
         //given
-        // setUpSecurityContextForTests(false);
         CreateOrderRequestDTO orderDTO = createCorrectOrderRequestDTO();
         Order order = createOrderInStageAfterMapping();
         String expectedMessage = "No authenticated user found.";
@@ -132,21 +125,5 @@ class OrderServiceHelperTest {
         OrderLineDTO orderLine2 = new OrderLineDTO(2L, 3);
 
         return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
-    }
-
-    private CreateOrderRequestDTO createOrderRequestDTOWithIncorrectProductId(Long incorrectId) {
-        AddressDTO addressToSend = new AddressDTO("Street", "City", "ZipCode", "PhoneNumber");
-        OrderLineDTO orderLine1 = new OrderLineDTO(1L, 2);
-        OrderLineDTO orderLine2 = new OrderLineDTO(incorrectId, 3);
-
-        return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
-    }
-
-    private CreateOrderRequestDTO createOrderRequestDTOWithWrongQuantity(OrderLineDTO orderLine) {
-        AddressDTO addressToSend = new AddressDTO("Street", "City", "ZipCode", "PhoneNumber");
-        OrderLineDTO orderLine1 = new OrderLineDTO(1L, 5);
-        OrderLineDTO orderLine2 = new OrderLineDTO(2L, 5);
-
-        return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2, orderLine));
     }
 }

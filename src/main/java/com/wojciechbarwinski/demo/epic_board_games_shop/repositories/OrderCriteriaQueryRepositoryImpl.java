@@ -122,6 +122,4 @@ public class OrderCriteriaQueryRepositoryImpl implements OrderCriteriaQueryRepos
 
         return orders;
     }
-
-
 }
