@@ -27,6 +27,7 @@ public class OrderStatusChangeValidation {
             return nextStatus;
         }
 
+
         throw new OrderStatusChangeException(currentStatus, nextStatus);
     }
 }
