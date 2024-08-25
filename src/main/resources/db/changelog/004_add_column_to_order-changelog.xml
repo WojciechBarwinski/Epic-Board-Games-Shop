@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -6,15 +7,14 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
 
-    <include file="db/changelog/001_create_table-changelog.xml"/>
-    <include file="db/changelog/002_insert_data-changelog.xml"/>
-    <include file="db/changelog/003_insert_order-changelog.xml"/>
-    <include file="db/changelog/004_add_column_to_order-changelog.xml"/>
-    <include file="db/changelog/005_insert_data_to_orders-changelog.xml"/>
+    <changeSet id="4" author="Wojtek B">
 
+        <addColumn tableName="orders">
+            <column name="status_updated_at" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
 
-
-
-
+    </changeSet>
 
 </databaseChangeLog>
