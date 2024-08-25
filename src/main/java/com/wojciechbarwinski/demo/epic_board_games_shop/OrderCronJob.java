@@ -23,8 +23,9 @@ public class OrderCronJob {
 
     private final OrderRepository orderRepository;
 
+
     @Scheduled(cron = "${orders.cleanup.not-confirmed.cronexpr}")
-    public void cancelOrdersNotPaidForTooLong() {
+    public void cancelOrdersForNotConfirmForTooLong() {
 
         LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(notConfirmedTimer);
         List<Order> orders = orderRepository.findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus.PLACED, thresholdTime);
@@ -33,20 +34,18 @@ public class OrderCronJob {
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
         }
-
     }
 
     @Scheduled(cron = "${orders.cleanup.not-payed.cronexpr}")
-    public void cancelOrderAfter24HoursOnPAYMENT_VERIFICATIONStage() {
-
+    public void cancelOrdersForNotPaidForTooLong() {
 
         LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(notPayedTimer);
         List<Order> orders = orderRepository.findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus.PAYMENT_VERIFICATION, thresholdTime);
 
         for (Order order : orders) {
             order.setOrderStatus(OrderStatus.CANCELLED);
+            orderRepository.save(order);
         }
-
-        orderRepository.saveAll(orders);
     }
+
 }

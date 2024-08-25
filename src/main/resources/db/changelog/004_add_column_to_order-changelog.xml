@@ -9,12 +9,12 @@
 
     <changeSet id="4" author="Wojtek B">
 
-<addColumn tableName="orders">
-    <column name="status_updated_at" type="DATETIME">
-        <constraints nullable="true"/>
-    </column>
-</addColumn>
-
+        <addColumn tableName="orders">
+            <column name="status_updated_at" type="DATETIME">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
 
     </changeSet>
+
 </databaseChangeLog>

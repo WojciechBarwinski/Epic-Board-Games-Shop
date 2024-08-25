@@ -46,7 +46,7 @@
             <column name="orderer_mail" value="klient2@example.com"/>
             <column name="employee_id" value="owner@mail.com"/>
             <column name="address" value="1"/>
-            <column name="order_status" value="PAYMENT_VERIFICATION"/>
+            <column name="order_status" value="CONFIRMED"/>
         </insert>
         <insert tableName="order_line">
             <column name="order_id" value="2"/>
