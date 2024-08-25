@@ -33,7 +33,6 @@ class OrderStatusChangeValidationTest {
     private static Stream<OrderStatusTransitionToTest> getCorrectSetOfStatus() {
         return Stream.of(
                 new OrderStatusTransitionToTest(PAID, CANCELLED),
-                new OrderStatusTransitionToTest(PAID, ON_HOLD),
                 new OrderStatusTransitionToTest(PAID, RECEIVED_BY_WAREHOUSE),
                 new OrderStatusTransitionToTest(SHIPPED, DELIVERED)
         );
@@ -42,7 +41,6 @@ class OrderStatusChangeValidationTest {
     private static Stream<OrderStatusTransitionToTest> getWrongSetOfStatus() {
         return Stream.of(
                 new OrderStatusTransitionToTest(PAID, SHIPPED),
-                new OrderStatusTransitionToTest(PLACED, ON_HOLD),
                 new OrderStatusTransitionToTest(PAID, COMPLETED)
         );
     }
