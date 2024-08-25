@@ -39,8 +39,8 @@ public class Order {
     @Column(name = "order_status")
     private OrderStatus orderStatus;
 
-    @Column(name = "status_place_date")
-    private LocalDateTime actualStatusSetDate;
+    @Column(name = "status_updated_at")
+    private LocalDateTime statusUpdatedAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderLine> orderLines;

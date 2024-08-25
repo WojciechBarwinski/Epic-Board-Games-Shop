@@ -29,7 +29,6 @@
             <column name="employee_id" value="owner@mail.com"/>
             <column name="address" value="1"/>
             <column name="order_status" value="CONFIRMED"/>
-            <column name="status_place_date" value="2024-08-24T15:30:00"/>
         </insert>
         <insert tableName="order_line">
             <column name="order_id" value="1"/>
@@ -48,7 +47,6 @@
             <column name="employee_id" value="owner@mail.com"/>
             <column name="address" value="1"/>
             <column name="order_status" value="PAYMENT_VERIFICATION"/>
-            <column name="status_place_date" value="2024-08-20T15:30:00"/>
         </insert>
         <insert tableName="order_line">
             <column name="order_id" value="2"/>
@@ -67,7 +65,6 @@
             <column name="employee_id" value="seller@mail.com"/>
             <column name="address" value="2"/>
             <column name="order_status" value="CONFIRMED"/>
-            <column name="status_place_date" value="2024-08-24T15:30:00"/>
         </insert>
         <insert tableName="order_line">
             <column name="order_id" value="3"/>
@@ -81,7 +78,6 @@
             <column name="employee_id" value="seller@mail.com"/>
             <column name="address" value="2"/>
             <column name="order_status" value="PLACED"/>
-            <column name="status_place_date" value="2024-08-24T08:30:00"/>
         </insert>
         <insert tableName="order_line">
             <column name="order_id" value="4"/>
@@ -95,7 +91,6 @@
             <column name="employee_id" value="owner@mail.com"/>
             <column name="address" value="1"/>
             <column name="order_status" value="PLACED"/>
-            <column name="status_place_date" value="2024-08-24T08:30:00"/>
         </insert>
         <insert tableName="order_line">
             <column name="order_id" value="5"/>

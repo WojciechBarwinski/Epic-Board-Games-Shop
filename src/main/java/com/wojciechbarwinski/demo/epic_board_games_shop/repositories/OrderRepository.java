@@ -10,5 +10,5 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long>, OrderCriteriaQueryRepository {
     List<Order> findByOrderStatus(OrderStatus orderStatus);
 
-    List<Order> findByOrderStatusAndActualStatusSetDateBefore(OrderStatus status, LocalDateTime dateTime);
+    List<Order> findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus status, LocalDateTime dateTime);
 }

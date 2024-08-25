@@ -9,6 +9,8 @@
     <include file="db/changelog/001_create_table-changelog.xml"/>
     <include file="db/changelog/002_insert_data-changelog.xml"/>
     <include file="db/changelog/003_insert_order-changelog.xml"/>
+    <include file="db/changelog/004_add_column_to_order-changelog.xml"/>
+    <include file="db/changelog/005_insert_data_to_orders-changelog.xml"/>
 
 
 

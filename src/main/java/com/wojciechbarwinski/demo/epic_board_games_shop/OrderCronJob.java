@@ -4,6 +4,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -14,38 +15,38 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderCronJob {
 
+    @Value("${orders.cleanup.not-confirmed.timer-minutes}")
+    private int notConfirmedTimer;
+
+    @Value("${orders.cleanup.not-payed.timer-minutes}")
+    private int notPayedTimer;
+
     private final OrderRepository orderRepository;
 
-    @Scheduled(cron = "0 */10 * * * * ") //every 10 minutes
-    public void cancelOrderAfterTenMinutesOnPLACEStage() {
+    @Scheduled(cron = "${orders.cleanup.not-confirmed.cronexpr}")
+    public void cancelOrdersNotPaidForTooLong() {
 
-        LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(10);
-        List<Order> orders = orderRepository.findByOrderStatusAndActualStatusSetDateBefore(OrderStatus.PLACED, thresholdTime);
+        LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(notConfirmedTimer);
+        List<Order> orders = orderRepository.findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus.PLACED, thresholdTime);
 
         for (Order order : orders) {
             order.setOrderStatus(OrderStatus.CANCELLED);
+            orderRepository.save(order);
         }
 
-        orderRepository.saveAll(orders);
     }
 
-    @Scheduled(cron = "0 0 * * * *") //every 24H
+    @Scheduled(cron = "${orders.cleanup.not-payed.cronexpr}")
     public void cancelOrderAfter24HoursOnPAYMENT_VERIFICATIONStage() {
 
-        LocalDateTime thresholdTime = LocalDateTime.now().minusHours(24);
-        List<Order> orders = orderRepository.findByOrderStatusAndActualStatusSetDateBefore(OrderStatus.PAYMENT_VERIFICATION, thresholdTime);
+
+        LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(notPayedTimer);
+        List<Order> orders = orderRepository.findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus.PAYMENT_VERIFICATION, thresholdTime);
 
         for (Order order : orders) {
             order.setOrderStatus(OrderStatus.CANCELLED);
         }
 
         orderRepository.saveAll(orders);
-    }
-
-    @Scheduled(cron = "0 0 14 * * *") // every day at 14:00
-    public void sendAllPaidOrdersToWarehouse(){
-        List<Order> byOrderStatus = orderRepository.findByOrderStatus(OrderStatus.PAID);
-
-        //TODO after marge with ES-010 Order Flow
     }
 }
