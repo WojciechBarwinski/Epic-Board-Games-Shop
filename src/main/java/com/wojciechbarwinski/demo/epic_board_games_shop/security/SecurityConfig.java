@@ -48,6 +48,9 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/order/{hashId}/cancel").permitAll()
+                        .requestMatchers("/order/{hashId}/payment").permitAll()
+                        .requestMatchers("/order/shipment").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults());

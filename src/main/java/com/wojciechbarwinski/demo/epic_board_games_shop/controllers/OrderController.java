@@ -1,14 +1,12 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.controllers;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderSearchRequestDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.SortDirection;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.*;
 import com.wojciechbarwinski.demo.epic_board_games_shop.services.OrderServiceFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,7 +24,7 @@ public class OrderController {
     @PostMapping
     OrderResponseDTO createOrder(@Valid @RequestBody CreateOrderRequestDTO createOrderRequestDto) {
 
-        return orderServiceFacade.orderProceed(createOrderRequestDto);
+        return orderServiceFacade.createOrder(createOrderRequestDto);
     }
 
     @GetMapping(value = "/{id}")
@@ -63,6 +61,42 @@ public class OrderController {
                 .build();
 
         return orderServiceFacade.getAllOrdersBySearchingData(build);
+    }
+
+
+    @PatchMapping("/{id}/confirm")
+    OrderResponseDTO confirmOrder(@PathVariable Long id) {
+        return orderServiceFacade.proceedOrderAfterConfirm(id);
+    }
+
+    @PatchMapping("/{id}/reject")
+    ResponseEntity<String> rejectOrder(@PathVariable Long id) {
+        orderServiceFacade.rejectOrder(id);
+        return ResponseEntity.ok().body("Order was rejected");
+    }
+
+    @PatchMapping("/{codeId}/cancel")
+    ResponseEntity<String> cancelOrder(@PathVariable String codeId) {
+        orderServiceFacade.cancelOrder(codeId);
+        return ResponseEntity.ok().body("Your order was cancel");
+    }
+
+    @PatchMapping("/{codeId}/payment")
+    ResponseEntity<String> payForOrder(@PathVariable String codeId) { //tmp controller to simulation situation when client pay for Order
+        orderServiceFacade.proceedOrderAfterPayment(codeId);
+        return ResponseEntity.ok().body("Your payment was success");
+    }
+
+    @PostMapping("/shipment")
+    ResponseEntity<Void> updateStatusFromWarehouse(
+            @RequestBody @Valid WarehouseOrderStatusChangeRequest warehouseOrderStatusChangeRequest
+    ) {
+        OrderDataFromWarehouseDTO orderDataFromWarehouseDTO = new OrderDataFromWarehouseDTO(
+                warehouseOrderStatusChangeRequest.orderId(),
+                warehouseOrderStatusChangeRequest.status()
+        );
+        orderServiceFacade.updateStatusFromWarehouse(orderDataFromWarehouseDTO);
+        return ResponseEntity.ok().build();
     }
 
     private void throwExceptionIfPageOrSizeHasNegativeValue(int page, int size) {

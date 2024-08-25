@@ -27,5 +27,5 @@ public class OrderResponseDTO {
 
     private String status;
 
-    private List<OrderLineDTO> orderLineDTOs = new ArrayList<>();
+    private List<OrderLineDTO> orderLineDTOS = new ArrayList<>();
 }

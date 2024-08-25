@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class OrderServiceHelper {
+class OrderCreateServiceHelper {
 
     private final ProductRepository productRepository;
     private final AuthenticationHelper authenticationHelper;

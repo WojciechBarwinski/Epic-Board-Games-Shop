@@ -1,8 +1,8 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.services;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.AddressDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import org.junit.jupiter.api.Test;
@@ -19,19 +19,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-@ActiveProfiles("local")
-class OrderServiceFacadeTest {
-
+@ActiveProfiles("integration")
+class OrderCreateServiceIntegrationTest {
 
     @Autowired
-    private OrderServiceFacade orderServiceFacade;
+    private OrderCreateService orderCreateService;
 
     @Test
     @WithMockUser(username = "owner@mail.com")
-    void integrationOrderProceed() {
+    void integrationCreateOrder() {
         //given
         CreateOrderRequestDTO orderRequest = createOrderRequest();
         BigDecimal expectedTotalPrice = BigDecimal.valueOf(748.49); // product id1 = 525.50 x1 quantity, id2 = 222.99x1 quantity  SUM 748.49
@@ -41,14 +39,14 @@ class OrderServiceFacadeTest {
         String expectedAddressPhoneNumber = "PhoneNumber";
 
         //when
-        OrderResponseDTO orderResponse = orderServiceFacade.orderProceed(orderRequest);
+        OrderResponseDTO orderResponse = orderCreateService.createOrder(orderRequest);
 
         //then
         assertNotNull(orderResponse.getId());
         assertEquals("owner@mail.com", orderResponse.getSellerId());
         assertEquals(expectedTotalPrice, orderResponse.getTotalPrice());
         assertEquals(expectedStatus, orderResponse.getStatus());
-        assertEquals(expectedListDTOSize, orderResponse.getOrderLineDTOs().size());
+        assertEquals(expectedListDTOSize, orderResponse.getOrderLineDTOS().size());
         assertEquals(expectedOrdererMail, orderResponse.getOrdererMail());
         assertEquals(expectedOrdererMail, orderResponse.getOrdererMail());
         assertEquals(expectedAddressPhoneNumber, orderResponse.getAddressToSend().phoneNumber());
@@ -63,5 +61,4 @@ class OrderServiceFacadeTest {
 
         return new CreateOrderRequestDTO("orderer@example.com", addressToSend, List.of(orderLine1, orderLine2));
     }
-
 }
