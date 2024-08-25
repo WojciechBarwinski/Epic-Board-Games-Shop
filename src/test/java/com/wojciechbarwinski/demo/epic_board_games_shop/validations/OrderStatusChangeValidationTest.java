@@ -2,78 +2,54 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.validations;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.OrderStatusChangeException;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OrderStatusChangeValidationTest {
 
     private final OrderStatusChangeValidation statusValidation = new OrderStatusChangeValidation();
 
-    @Test
-    void shouldReturnCANCELLEDStatus() {
-        OrderStatus currentStatus = PAID;
-        OrderStatus nextStatus = CANCELLED;
-
-        OrderStatus newStatus = statusValidation.setValidatedOrderStatus(currentStatus, nextStatus);
-
-        assertEquals(nextStatus, newStatus);
+    @ParameterizedTest
+    @MethodSource("getCorrectSetOfStatus")
+    void shouldNotThrowExceptionWhenStatusChangeAreCorrect(OrderStatusTransitionToTest orderStatusSet) {
+        //when/then
+        statusValidation.assertOrderStatusTransitionIsAllowed(orderStatusSet.currentStatus, orderStatusSet.nextStatus);
     }
 
-    @Test
-    void shouldReturnON_HOLDStatusWhenCurrentStatusIsAnotherThenPLACED() {
-        OrderStatus currentStatus = PAID;
-        OrderStatus nextStatus = ON_HOLD;
-
-        OrderStatus newStatus = statusValidation.setValidatedOrderStatus(currentStatus, nextStatus);
-
-        assertEquals(nextStatus, newStatus);
+    @ParameterizedTest
+    @MethodSource("getWrongSetOfStatus")
+    void shouldThrowExceptionWhenStatusChangeAreIncorrect(OrderStatusTransitionToTest orderStatusSet) {
+        //when/then
+        assertThrows(OrderStatusChangeException.class,
+                () -> statusValidation.assertOrderStatusTransitionIsAllowed(orderStatusSet.currentStatus, orderStatusSet.nextStatus));
     }
 
-    @Test
-    void shouldReturnRECEIVED_BY_WAREHOUSEStatusWhenCurrentStatusIsPAID() {
-        OrderStatus currentStatus = PAID;
-        OrderStatus nextStatus = RECEIVED_BY_WAREHOUSE;
 
-        OrderStatus newStatus = statusValidation.setValidatedOrderStatus(currentStatus, nextStatus);
-
-        assertEquals(nextStatus, newStatus);
+    private static Stream<OrderStatusTransitionToTest> getCorrectSetOfStatus() {
+        return Stream.of(
+                new OrderStatusTransitionToTest(PAID, CANCELLED),
+                new OrderStatusTransitionToTest(PAID, ON_HOLD),
+                new OrderStatusTransitionToTest(PAID, RECEIVED_BY_WAREHOUSE),
+                new OrderStatusTransitionToTest(SHIPPED, DELIVERED)
+        );
     }
 
-    @Test
-    void shouldReturnDELIVEREDStatusWhenCurrentStatusIsSHIPPED() {
-        OrderStatus currentStatus = SHIPPED;
-        OrderStatus nextStatus = DELIVERED;
-
-        OrderStatus newStatus = statusValidation.setValidatedOrderStatus(currentStatus, nextStatus);
-
-        assertEquals(nextStatus, newStatus);
+    private static Stream<OrderStatusTransitionToTest> getWrongSetOfStatus() {
+        return Stream.of(
+                new OrderStatusTransitionToTest(PAID, SHIPPED),
+                new OrderStatusTransitionToTest(PLACED, ON_HOLD),
+                new OrderStatusTransitionToTest(PAID, COMPLETED)
+        );
     }
 
-    @Test
-    void shouldThrowExceptionWhenNextStatusIsON_HOLDAndCurrentStatusIsPLACED() {
-        OrderStatus currentStatus = PLACED;
-        OrderStatus nextStatus = ON_HOLD;
-        String exceptionMessage = "Cannot transition from status 'PLACED' to status 'ON_HOLD'. This transition is not allowed.";
 
-        OrderStatusChangeException exception = assertThrows(OrderStatusChangeException.class,
-                () -> statusValidation.setValidatedOrderStatus(currentStatus, nextStatus));
-
-        assertEquals(exceptionMessage, exception.getMessage());
+    private record OrderStatusTransitionToTest(
+            OrderStatus currentStatus,
+            OrderStatus nextStatus) {
     }
-
-    @Test
-    void shouldThrowExceptionWhenNextStatusIsSHIPPEDAndCurrentStatusIsPAID() {
-        OrderStatus currentStatus = PAID;
-        OrderStatus nextStatus = SHIPPED;
-        String exceptionMessage = "Cannot transition from status 'PAID' to status 'SHIPPED'. This transition is not allowed.";
-
-        OrderStatusChangeException exception = assertThrows(OrderStatusChangeException.class,
-                () -> statusValidation.setValidatedOrderStatus(currentStatus, nextStatus));
-
-        assertEquals(exceptionMessage, exception.getMessage());
-    }
-
 }
