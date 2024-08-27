@@ -2,6 +2,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
+import com.wojciechbarwinski.demo.epic_board_games_shop.legendaryWarehouse.LegendaryWarehouseSender;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,11 @@ public class OrderCronJob {
     @Value("${orders.cleanup.not-payed.timer-minutes}")
     private int notPayedTimer;
 
+    @Value("${orders.cleanup.send-payed.timer-minutes}")
+    private int sendPayedTimer;
+
     private final OrderRepository orderRepository;
+    private final LegendaryWarehouseSender legendaryWarehouseSender;
 
 
     @Scheduled(cron = "${orders.cleanup.not-confirmed.cronexpr}")
@@ -45,6 +50,17 @@ public class OrderCronJob {
         for (Order order : orders) {
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
+        }
+    }
+
+    @Scheduled(cron = "${orders.cleanup.send-payed.cronexpr}")
+    public void sendOrdersThatIsPaid() {
+
+        LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(sendPayedTimer);
+        List<Order> orders = orderRepository.findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus.PAID, thresholdTime);
+
+        for (Order order : orders) {
+            legendaryWarehouseSender.sendOrderToLegendaryWarehouse(order);
         }
     }
 
