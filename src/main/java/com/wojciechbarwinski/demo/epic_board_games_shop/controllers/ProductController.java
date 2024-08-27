@@ -1,7 +1,7 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.controllers;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.ProductDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.services.ProductServicesFacade;
+import com.wojciechbarwinski.demo.epic_board_games_shop.services.product.ProductServicesFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
