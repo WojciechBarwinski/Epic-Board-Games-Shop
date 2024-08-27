@@ -3,6 +3,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
+import com.wojciechbarwinski.demo.epic_board_games_shop.services.ProductServicesFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,6 +23,7 @@ public class OrderCronJob {
     private int notPayedTimer;
 
     private final OrderRepository orderRepository;
+    private final ProductServicesFacade productServicesFacade;
 
 
     @Scheduled(cron = "${orders.cleanup.not-confirmed.cronexpr}")
@@ -33,6 +35,7 @@ public class OrderCronJob {
         for (Order order : orders) {
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
+            productServicesFacade.increaseProductQuantity(order.getOrderLines());
         }
     }
 
@@ -45,6 +48,7 @@ public class OrderCronJob {
         for (Order order : orders) {
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
+            productServicesFacade.increaseProductQuantity(order.getOrderLines());
         }
     }
 

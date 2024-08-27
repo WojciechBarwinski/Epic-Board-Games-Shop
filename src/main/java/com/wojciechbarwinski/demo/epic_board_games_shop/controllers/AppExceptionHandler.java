@@ -1,10 +1,7 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.controllers;
 
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ErrorResponse;
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.MappingToDTOException;
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.MissingCredentialsException;
-import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.ProductsNotFoundException;
+import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.*;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.ApplicationSecurityException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.validations.ValidationError;
 import com.wojciechbarwinski.demo.epic_board_games_shop.validations.ValidationException;
@@ -70,5 +67,12 @@ public class AppExceptionHandler {
         }
 
         return new ErrorResponse<>("Validation errors", errors);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProductDecreaseException.class)
+    public ErrorResponse<String> productDecreaseException(ProductDecreaseException exception) {
+
+        return new ErrorResponse<>(exception.getMessage());
     }
 }

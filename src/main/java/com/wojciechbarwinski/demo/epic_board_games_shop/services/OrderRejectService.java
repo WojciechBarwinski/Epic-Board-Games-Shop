@@ -14,6 +14,7 @@ class OrderRejectService {
 
     private final OrderRepository orderRepository;
     private final OrderHelper orderHelper;
+    private final ProductServicesFacade productServicesFacade;
 
     void rejectOrder(Long id) {
 
@@ -23,5 +24,6 @@ class OrderRejectService {
         log.info("Order with id {} was cancelled", order.getId());
 
         orderRepository.save(order);
+        productServicesFacade.increaseProductQuantity(order.getOrderLines());
     }
 }

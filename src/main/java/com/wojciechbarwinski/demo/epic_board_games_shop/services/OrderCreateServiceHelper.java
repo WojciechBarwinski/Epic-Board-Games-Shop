@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ class OrderCreateServiceHelper {
     private final ProductRepository productRepository;
     private final AuthenticationHelper authenticationHelper;
     private final OrderValidator validator;
+    private final ProductServicesFacade productServicesFacade;
 
     Order prepareOrderToSave(CreateOrderRequestDTO orderDTO, Order order) {
 
@@ -34,6 +36,7 @@ class OrderCreateServiceHelper {
         order.setTotalPrice(getTotalOrderPrice(order.getOrderLines()));
         order.setEmployeeId(authenticationHelper.getSellerId());
         order.setOrderStatus(OrderStatus.PLACED);
+        order.setStatusUpdatedAt(LocalDateTime.now());
 
         return order;
     }
@@ -54,6 +57,7 @@ class OrderCreateServiceHelper {
                     .build());
         }
 
+        productServicesFacade.decreaseProductQuantity(orderLineDTOs);
         return orderLines;
     }
 
