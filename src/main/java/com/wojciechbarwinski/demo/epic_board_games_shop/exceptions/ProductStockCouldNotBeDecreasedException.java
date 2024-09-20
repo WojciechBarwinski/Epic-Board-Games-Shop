@@ -1,8 +1,8 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.exceptions;
 
-public class ProductDecreaseException extends ApplicationException {
+public class ProductStockCouldNotBeDecreasedException extends ApplicationException {
 
-    public ProductDecreaseException(Long productId, Integer quantityToRemove) {
+    public ProductStockCouldNotBeDecreasedException(Long productId, Integer quantityToRemove) {
         super(generateMessage(productId, quantityToRemove));
     }
 

@@ -70,8 +70,8 @@ public class AppExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(ProductDecreaseException.class)
-    public ErrorResponse<String> productDecreaseException(ProductDecreaseException exception) {
+    @ExceptionHandler(ProductStockCouldNotBeDecreasedException.class)
+    public ErrorResponse<String> productDecreaseException(ProductStockCouldNotBeDecreasedException exception) {
 
         return new ErrorResponse<>(exception.getMessage());
     }

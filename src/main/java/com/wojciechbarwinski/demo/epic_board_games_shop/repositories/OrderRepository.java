@@ -11,7 +11,6 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long>, OrderCriteriaQueryRepository {
 
-    //List<Order> findByOrderStatus(OrderStatus orderStatus);
 
     @Query("SELECT o FROM Order o LEFT JOIN FETCH o.orderLines WHERE o.orderStatus = :status AND o.statusUpdatedAt < :thresholdTime")
     List<Order> findByOrderStatusAndStatusUpdatedAtBefore(@Param("status") OrderStatus status,

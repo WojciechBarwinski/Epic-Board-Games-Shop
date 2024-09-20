@@ -34,7 +34,7 @@ public class OrderStatusChangeValidation {
         List<OrderStatus> orderStatuses = allStatuses.get(currentStatus);
 
         if (!orderStatuses.contains(nextStatus)) {
-            log.warn("Unauthorized attempt to change order status: changing from {} to {} is not allowed.", currentStatus, nextStatus);
+            log.warn("Forbidden attempt to change order status: changing from {} to {} is not allowed.", currentStatus, nextStatus);
             throw new OrderStatusChangeException(currentStatus, nextStatus);
         }
     }
