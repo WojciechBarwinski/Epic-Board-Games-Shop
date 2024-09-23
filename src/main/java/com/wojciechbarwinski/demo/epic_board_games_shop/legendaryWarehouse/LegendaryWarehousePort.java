@@ -1,9 +1,8 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.legendaryWarehouse;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderDataFromWarehouseDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderDataToWarehouseDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 
 public interface LegendaryWarehousePort {
 
-    OrderDataFromWarehouseDTO sendOrderToWarehouse(OrderDataToWarehouseDTO orderDataToWarehouseDTO);
+    void sendOrderToWarehouse(Order order);
 }

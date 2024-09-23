@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long>, OrderCriteriaQueryRepository {
-    List<Order> findByOrderStatus(OrderStatus orderStatus);
 
+    List<Order> findByOrderStatus(OrderStatus orderStatus);
     List<Order> findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus status, LocalDateTime dateTime);
+
 }
