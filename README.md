@@ -4,8 +4,8 @@
 
 Epic Board Game Shop to aplikacja umożliwiająca zarządzanie zamówieniami oraz produktami w sklepie stacjonarnym z 
 grami planszowymi. Klient przychodzi do sklepu, gdzie wraz ze sprzedawcą tworzą zamówienie, 
-które następnie jest przetwarzane przez aplikację. 
-Program integruje się z zewnętrznym systemem magazynowym [Legendary Warehouse](https://github.com/WojciechBarwinski/legendary-warehouse), 
+które następnie jest przetwarzane przez aplikację.
+Program integruje się z zewnętrznym systemem [Legendary Warehouse](https://github.com/WojciechBarwinski/legendary-warehouse), 
 który symuluje pracę magazynu.
 
 ## Funkcjonalności
@@ -19,7 +19,7 @@ po przesłanie zamówienia do Legendary Warehouse.
 ## Technologia
 
 - **Język**: Java
-- **Framework**: Spring Boot (JPA, Security, Web)
+- **Framework**: Spring Boot (JPA, Security, Web, Data)
 - **Baza Danych**: MySQL
 - **Mapowanie Obiektów**: MapStruct
 - **Walidacja**: Hibernate Validator
