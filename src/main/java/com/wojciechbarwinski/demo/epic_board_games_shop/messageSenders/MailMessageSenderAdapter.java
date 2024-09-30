@@ -20,7 +20,7 @@ public class MailMessageSenderAdapter implements MessageSenderPort{
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendSimpleMessageAfterOrderWasConfirm(Order order) {
+    public void sendSimpleMessageAfterOrderWasConfirmed(Order order) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(shopMail);
         message.setTo(order.getOrdererMail());

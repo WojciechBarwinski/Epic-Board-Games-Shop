@@ -27,7 +27,7 @@ class OrderProceedAfterConfirmService {
 
         order.setOrderStatus(OrderStatus.CONFIRMED);
         log.info("Order with id {} was confirm", order.getId());
-        messageSenderPort.sendSimpleMessageAfterOrderWasConfirm(order);
+        messageSenderPort.sendSimpleMessageAfterOrderWasConfirmed(order);
 
         orderRepository.save(order);
         return mapper.mapOrderToOrderResponseDTO(order);

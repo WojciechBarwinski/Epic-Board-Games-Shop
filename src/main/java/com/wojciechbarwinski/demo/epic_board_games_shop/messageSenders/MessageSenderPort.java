@@ -4,5 +4,5 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 
 public interface MessageSenderPort {
 
-    void sendSimpleMessageAfterOrderWasConfirm(Order order);
+    void sendSimpleMessageAfterOrderWasConfirmed(Order order);
 }
