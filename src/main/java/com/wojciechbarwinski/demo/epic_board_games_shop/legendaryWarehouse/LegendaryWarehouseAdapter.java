@@ -27,7 +27,7 @@ public class LegendaryWarehouseAdapter implements LegendaryWarehousePort {
 
         try {
             OrderDataFromWarehouseDTO orderDataFromWarehouseDTO = client.sendOrderToWarehouse(orderDataToWarehouseDTO);
-            log.info("Order with id {} was send to the warehouse successfully", order.getId());
+            log.info("Order with id {} was sent to the warehouse successfully", order.getId());
             order.setOrderStatus(orderDataFromWarehouseDTO.status());
         } catch (Exception e) {
             log.warn("Order with id {} was NOT sent to the warehouse successfully", order.getId(), e);

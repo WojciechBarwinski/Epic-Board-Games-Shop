@@ -38,7 +38,7 @@ public class OrderCronJob {
         }
     }
 
-    @Scheduled(cron = "${orders.cleanup.not-payed.cronexpr}")
+    @Scheduled(cron = "${orders.cleanup.not-paid.cronexpr}")
     public void cancelOrdersNotPaidForTooLong() {
 
         LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(notPayedTimer);
@@ -50,7 +50,7 @@ public class OrderCronJob {
         }
     }
 
-    @Scheduled(cron = "${orders.cleanup.send-payed.cronexpr}")
+    @Scheduled(cron = "${orders.cleanup.send-paid.cronexpr}")
     public void sendOrdersThatArePaid() {
 
         List<Order> orders = orderRepository.findByOrderStatus(OrderStatus.PAID);
