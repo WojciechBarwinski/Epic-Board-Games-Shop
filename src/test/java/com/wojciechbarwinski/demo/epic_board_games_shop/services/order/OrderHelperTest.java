@@ -1,8 +1,5 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.services;
+package com.wojciechbarwinski.demo.epic_board_games_shop.services.order;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderDataFromWarehouseDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
-import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.OrderNotFoundException;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import org.junit.jupiter.api.Test;
@@ -15,8 +12,8 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class OrderHelperTest {

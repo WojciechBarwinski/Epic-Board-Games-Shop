@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.services;
+package com.wojciechbarwinski.demo.epic_board_games_shop.services.order;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
