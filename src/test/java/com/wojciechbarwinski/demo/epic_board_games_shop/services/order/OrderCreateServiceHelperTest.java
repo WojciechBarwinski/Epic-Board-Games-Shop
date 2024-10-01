@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.services;
+package com.wojciechbarwinski.demo.epic_board_games_shop.services.order;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.AddressDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
@@ -10,6 +10,8 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationHelper;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.exceptions.InvalidSellerException;
+import com.wojciechbarwinski.demo.epic_board_games_shop.services.product.ProductServicesFacade;
+import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderStatusChangeValidation;
 import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +39,12 @@ class OrderCreateServiceHelperTest {
 
     @Mock
     private OrderValidator validator;
+
+    @Mock
+    private ProductServicesFacade productServicesFacade;
+
+    @Mock
+    private OrderStatusChangeValidation orderStatusChangeValidation;
 
     @InjectMocks
     private OrderCreateServiceHelper orderHelper;

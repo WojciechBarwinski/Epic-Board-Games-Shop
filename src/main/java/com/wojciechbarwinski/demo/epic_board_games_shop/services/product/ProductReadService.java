@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.services;
+package com.wojciechbarwinski.demo.epic_board_games_shop.services.product;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.ProductDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
@@ -11,12 +11,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ProductService {
+class ProductReadService {
 
     private final ProductRepository productRepository;
     private final MapperFacade mapper;
 
-    public List<ProductDTO> getAllProducts() {
+    List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
         return products.stream()
@@ -24,3 +24,4 @@ public class ProductService {
                 .toList();
     }
 }
+

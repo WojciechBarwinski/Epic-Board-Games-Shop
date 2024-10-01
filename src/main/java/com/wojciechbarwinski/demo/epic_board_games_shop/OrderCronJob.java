@@ -4,6 +4,8 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.legendaryWarehouse.LegendaryWarehousePort;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
+import com.wojciechbarwinski.demo.epic_board_games_shop.services.product.ProductServicesFacade;
+import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderStatusChangeValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,6 +26,8 @@ public class OrderCronJob {
 
     private final OrderRepository orderRepository;
     private final LegendaryWarehousePort legendaryWarehousePort;
+    private final ProductServicesFacade productServicesFacade;
+    private final OrderStatusChangeValidation orderStatusChangeValidation;
 
 
     @Scheduled(cron = "${orders.cleanup.not-confirmed.cronexpr}")
@@ -33,8 +37,10 @@ public class OrderCronJob {
         List<Order> orders = orderRepository.findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus.PLACED, thresholdTime);
 
         for (Order order : orders) {
+            orderStatusChangeValidation.assertOrderStatusTransitionIsAllowed(order.getOrderStatus(), OrderStatus.CANCELLED);
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
+            productServicesFacade.increaseProductQuantity(order.getOrderLines());
         }
     }
 
@@ -45,8 +51,10 @@ public class OrderCronJob {
         List<Order> orders = orderRepository.findByOrderStatusAndStatusUpdatedAtBefore(OrderStatus.PAYMENT_VERIFICATION, thresholdTime);
 
         for (Order order : orders) {
+            orderStatusChangeValidation.assertOrderStatusTransitionIsAllowed(order.getOrderStatus(), OrderStatus.CANCELLED);
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
+            productServicesFacade.increaseProductQuantity(order.getOrderLines());
         }
     }
 

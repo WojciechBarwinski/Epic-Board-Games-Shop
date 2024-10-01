@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.services;
+package com.wojciechbarwinski.demo.epic_board_games_shop.services.order;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.CreateOrderRequestDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderLineDTO;
@@ -8,12 +8,14 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Product;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.ProductRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.security.AuthenticationHelper;
+import com.wojciechbarwinski.demo.epic_board_games_shop.services.product.ProductServicesFacade;
 import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,7 @@ class OrderCreateServiceHelper {
     private final ProductRepository productRepository;
     private final AuthenticationHelper authenticationHelper;
     private final OrderValidator validator;
+    private final ProductServicesFacade productServicesFacade;
 
     Order prepareOrderToSave(CreateOrderRequestDTO orderDTO, Order order) {
 
@@ -34,6 +37,7 @@ class OrderCreateServiceHelper {
         order.setTotalPrice(getTotalOrderPrice(order.getOrderLines()));
         order.setEmployeeId(authenticationHelper.getSellerId());
         order.setOrderStatus(OrderStatus.PLACED);
+        order.setStatusUpdatedAt(LocalDateTime.now());
 
         return order;
     }
@@ -54,6 +58,7 @@ class OrderCreateServiceHelper {
                     .build());
         }
 
+        productServicesFacade.decreaseProductQuantity(orderLineDTOs);
         return orderLines;
     }
 
