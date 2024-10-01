@@ -1,14 +1,9 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.services.order;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.legendaryWarehouse.LegendaryWarehousePort;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderDataFromWarehouseDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderDataToWarehouseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
-import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
-import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
-import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderStatusChangeValidation;
 import com.wojciechbarwinski.demo.epic_board_games_shop.legendaryWarehouse.LegendaryWarehousePort;
+import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderStatusChangeValidation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,8 +13,6 @@ import org.springframework.stereotype.Service;
 @Service
 class OrderProceedAfterPaymentService {
 
-    private final OrderRepository orderRepository;
-    private final MapperFacade mapper;
     private final OrderHelper orderHelper;
     private final LegendaryWarehousePort port;
     private final OrderStatusChangeValidation orderStatusChangeValidation;
@@ -32,6 +25,6 @@ class OrderProceedAfterPaymentService {
         order.setOrderStatus(OrderStatus.PAID); //tmp useless
         log.info("Order with id {} was paid", order.getId());
 
-        legendaryWarehousePort.sendOrderToWarehouse(order);
+        port.sendOrderToWarehouse(order);
     }
 }
