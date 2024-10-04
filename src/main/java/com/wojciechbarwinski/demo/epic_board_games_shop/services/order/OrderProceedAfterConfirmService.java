@@ -4,6 +4,7 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.OrderResponseDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
+import com.wojciechbarwinski.demo.epic_board_games_shop.messageSenders.MessageSenderPort;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderStatusChangeValidation;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ class OrderProceedAfterConfirmService {
     private final OrderRepository orderRepository;
     private final MapperFacade mapper;
     private final OrderHelper orderHelper;
+    private final MessageSenderPort messageSenderPort;
     private final OrderStatusChangeValidation orderStatusChangeValidation;
 
     OrderResponseDTO proceedOrderAfterConfirm(Long id) {
@@ -27,8 +29,10 @@ class OrderProceedAfterConfirmService {
         orderStatusChangeValidation.assertOrderStatusTransitionIsAllowed(order.getOrderStatus(), OrderStatus.CONFIRMED);
         order.setOrderStatus(OrderStatus.CONFIRMED);
         log.info("Order with id {} was confirm", order.getId());
-        //here will be method that create payment-link and sent it to client mail to pay OR to decline order
+        messageSenderPort.sendSimpleMessageAfterOrderWasConfirmed(order);
+
         orderRepository.save(order);
         return mapper.mapOrderToOrderResponseDTO(order);
     }
+
 }
