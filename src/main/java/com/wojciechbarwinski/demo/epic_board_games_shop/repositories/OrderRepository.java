@@ -16,4 +16,6 @@ public interface OrderRepository extends JpaRepository<Order, Long>, OrderCriter
     List<Order> findByOrderStatusAndStatusUpdatedAtBefore(@Param("status") OrderStatus status,
                                                           @Param("thresholdTime") LocalDateTime thresholdTime);
 
+
+    List<Order> findByOrderStatus(OrderStatus orderStatus);
 }

@@ -2,6 +2,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
+import com.wojciechbarwinski.demo.epic_board_games_shop.legendaryWarehouse.LegendaryWarehousePort;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
 import com.wojciechbarwinski.demo.epic_board_games_shop.services.product.ProductServicesFacade;
 import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderStatusChangeValidation;
@@ -20,10 +21,11 @@ public class OrderCronJob {
     @Value("${orders.cleanup.not-confirmed.timer-minutes}")
     private int notConfirmedTimer;
 
-    @Value("${orders.cleanup.not-payed.timer-minutes}")
+    @Value("${orders.cleanup.not-paid.timer-minutes}")
     private int notPayedTimer;
 
     private final OrderRepository orderRepository;
+    private final LegendaryWarehousePort legendaryWarehousePort;
     private final ProductServicesFacade productServicesFacade;
     private final OrderStatusChangeValidation orderStatusChangeValidation;
 
@@ -42,7 +44,7 @@ public class OrderCronJob {
         }
     }
 
-    @Scheduled(cron = "${orders.cleanup.not-payed.cronexpr}")
+    @Scheduled(cron = "${orders.cleanup.not-paid.cronexpr}")
     public void cancelOrdersNotPaidForTooLong() {
 
         LocalDateTime thresholdTime = LocalDateTime.now().minusMinutes(notPayedTimer);
@@ -53,6 +55,16 @@ public class OrderCronJob {
             order.setOrderStatus(OrderStatus.CANCELLED);
             orderRepository.save(order);
             productServicesFacade.increaseProductQuantity(order.getOrderLines());
+        }
+    }
+
+    @Scheduled(cron = "${orders.cleanup.send-paid.cronexpr}")
+    public void sendOrdersThatArePaid() {
+
+        List<Order> orders = orderRepository.findByOrderStatus(OrderStatus.PAID);
+
+        for (Order order : orders) {
+            legendaryWarehousePort.sendOrderToWarehouse(order);
         }
     }
 
