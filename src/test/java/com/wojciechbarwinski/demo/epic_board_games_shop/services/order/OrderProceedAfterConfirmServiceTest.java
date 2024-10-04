@@ -1,22 +1,22 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.services;
+package com.wojciechbarwinski.demo.epic_board_games_shop.services.order;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
+import com.wojciechbarwinski.demo.epic_board_games_shop.mappers.MapperFacade;
 import com.wojciechbarwinski.demo.epic_board_games_shop.repositories.OrderRepository;
+import com.wojciechbarwinski.demo.epic_board_games_shop.validations.OrderStatusChangeValidation;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderCancelServiceTest {
+class OrderProceedAfterConfirmServiceTest {
 
     @Mock
     private OrderRepository orderRepository;
@@ -24,29 +24,34 @@ class OrderCancelServiceTest {
     @Mock
     private OrderHelper orderHelper;
 
+    @Mock
+    private MapperFacade mapperFacade;
+
+    @Mock
+    private OrderStatusChangeValidation orderStatusChangeValidation;
+
     @InjectMocks
-    private OrderCancelService orderCancelService;
+    private OrderProceedAfterConfirmService orderProceedAfterConfirmService;
 
     @Test
-    void shouldSetOrderStatusOnCancelledAfterOrderCancelled(){
+    void shouldSerOrderStatusOnConfirmAfterOrderConfirm() {
         // given
-        String codeId = "1";
         Long orderId = 1L;
-        OrderStatus statusAfterCancelled = OrderStatus.CANCELLED;
+        OrderStatus statusAfterConfirm = OrderStatus.CONFIRMED;
 
         Order order = new Order();
         order.setId(orderId);
         order.setOrderStatus(OrderStatus.PLACED);
 
         when(orderHelper.getOrderById(orderId)).thenReturn(order);
+        when(mapperFacade.mapOrderToOrderResponseDTO(order)).thenReturn(null);
 
-        //when
-        orderCancelService.cancelOrder(codeId);
+        // when
+        orderProceedAfterConfirmService.proceedOrderAfterConfirm(orderId);
 
         // then
         verify(orderHelper).getOrderById(orderId);
         verify(orderRepository).save(order);
-        assertEquals(statusAfterCancelled, order.getOrderStatus());
+        assertEquals(statusAfterConfirm, order.getOrderStatus());
     }
-
 }

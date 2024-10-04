@@ -1,7 +1,7 @@
 package com.wojciechbarwinski.demo.epic_board_games_shop.controllers;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.dtos.*;
-import com.wojciechbarwinski.demo.epic_board_games_shop.services.OrderServiceFacade;
+import com.wojciechbarwinski.demo.epic_board_games_shop.services.order.OrderServiceFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

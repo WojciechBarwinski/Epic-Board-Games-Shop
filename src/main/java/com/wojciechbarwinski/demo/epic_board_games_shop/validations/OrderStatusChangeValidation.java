@@ -2,6 +2,7 @@ package com.wojciechbarwinski.demo.epic_board_games_shop.validations;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus;
 import com.wojciechbarwinski.demo.epic_board_games_shop.exceptions.OrderStatusChangeException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -10,6 +11,7 @@ import java.util.Map;
 
 import static com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderStatus.*;
 
+@Slf4j
 @Component
 public class OrderStatusChangeValidation {
 
@@ -32,6 +34,7 @@ public class OrderStatusChangeValidation {
         List<OrderStatus> orderStatuses = allStatuses.get(currentStatus);
 
         if (!orderStatuses.contains(nextStatus)) {
+            log.warn("Forbidden attempt to change order status: changing from {} to {} is not allowed.", currentStatus, nextStatus);
             throw new OrderStatusChangeException(currentStatus, nextStatus);
         }
     }
