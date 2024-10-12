@@ -6,7 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "PayUAuthClient", url = "https://secure.snd.payu.com")
+@FeignClient(name = "PayUAuthClient", url = "${payU.auth_url}")
 interface PayUAuthClient {
 
     @PostMapping("/pl/standard/user/oauth/authorize")
