@@ -10,9 +10,9 @@ public class PaymentService {
 
     private final PaymentPort paymentPort;
 
-        public PaymentDataDTO createPaymentData(Order order){
+        public PaymentDataDTO createOrderPayment(Order order){
 
-            return paymentPort.createPaymentData(order);
+            return paymentPort.createPayUOrder(order);
         }
 
 }

@@ -32,7 +32,7 @@ class OrderProceedAfterConfirmService {
         orderStatusChangeValidation.assertOrderStatusTransitionIsAllowed(order.getOrderStatus(), OrderStatus.CONFIRMED);
         order.setOrderStatus(OrderStatus.CONFIRMED);
         log.info("Order with id {} was confirm", order.getId());
-        PaymentDataDTO payUOrder = paymentService.createPaymentData(order);
+        PaymentDataDTO payUOrder = paymentService.createOrderPayment(order);
         //TODO -> Dodać do ORDER pole payU ID [ES-018] i dopisywać je do order
         messageSenderPort.sendOrderConfirmationWithPaymentUrl(order, payUOrder.getRedirectUri());
 

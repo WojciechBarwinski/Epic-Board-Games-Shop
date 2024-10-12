@@ -4,5 +4,5 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 
 public interface PaymentPort {
 
-    PaymentDataDTO createPaymentData(Order order);
+    PaymentDataDTO createPayUOrder(Order order);
 }

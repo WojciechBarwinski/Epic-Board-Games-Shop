@@ -18,7 +18,7 @@ public class PayUClientImpl implements PayUClient {
     }
 
     @Override
-    public Response getPayUOrder(String token, String orderRequestJSON) {
-        return payUOrderClient.getNewPaymentOrder(token, orderRequestJSON);
+    public Response executeOrderRequest(String token, String orderRequestJSON) {
+        return payUOrderClient.executeOrderRequest(token, orderRequestJSON);
     }
 }

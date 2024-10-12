@@ -20,12 +20,12 @@ public class PayUNewOrderProvider {
     private final PayUObjectMapper objectMapper;
     private final PayUClient payUClient;
 
-    public PaymentDataDTO getNewPaymentOrder(String authorizationToken, PayUOrderRequestDTO payUOrderRequestDTO) {
+    public PaymentDataDTO createNewOrder(String authorizationToken, PayUOrderRequestDTO payUOrderRequestDTO) {
 
         String orderRequestJSON = objectMapper.mapPayUOrderRequestToJSON(payUOrderRequestDTO);
 
         log.info("Executing HTTP request with order to PayU.");
-        try (Response response = payUClient.getPayUOrder(authorizationToken, orderRequestJSON)) {
+        try (Response response = payUClient.executeOrderRequest(authorizationToken, orderRequestJSON)) {
             if (response.code() != payUCreateOrderCodeResponse) {
                 log.warn("Unsuccessful response from PayU. HTTP status: {}", response.code());
                 throw new PayUOrderExecutionException(response.code());

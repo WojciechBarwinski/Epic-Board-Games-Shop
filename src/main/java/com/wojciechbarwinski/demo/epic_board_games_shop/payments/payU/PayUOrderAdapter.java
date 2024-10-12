@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PayUPaymentAdapter implements PaymentPort {
+public class PayUOrderAdapter implements PaymentPort {
 
 
     private final PayUAuthTokenProvider payUAuthTokenProvider;
@@ -23,12 +23,12 @@ public class PayUPaymentAdapter implements PaymentPort {
     private final PayUOrderCreator payUOrderCreator;
 
     @Override
-    public PaymentDataDTO createPaymentData(Order order) {
+    public PaymentDataDTO createPayUOrder(Order order) {
 
         String accessToken = payUAuthTokenProvider.getAccessToken();
         PayUOrderRequestDTO payUOrderRequestDTO = payUOrderCreator.createPayUOrderDTOFromOrder(order);
 
-        return payUNewOrderProvider.getNewPaymentOrder(accessToken, payUOrderRequestDTO);
+        return payUNewOrderProvider.createNewOrder(accessToken, payUOrderRequestDTO);
     }
 }
 

@@ -9,6 +9,6 @@ public interface PayUClient {
                                         String clientId,
                                         String clientSecret);
 
-    Response getPayUOrder(String token,
-                          String orderRequestJSON);
+    Response executeOrderRequest(String token,
+                                 String orderRequestJSON);
 }

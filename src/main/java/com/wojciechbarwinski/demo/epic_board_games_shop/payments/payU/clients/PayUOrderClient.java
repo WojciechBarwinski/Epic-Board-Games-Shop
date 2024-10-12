@@ -22,7 +22,7 @@ class PayUOrderClient {
     private String url;
 
 
-    Response getNewPaymentOrder(String authorizationToken, String orderRequestJSON) {
+    Response executeOrderRequest(String authorizationToken, String orderRequestJSON) {
 
         Request request = buildHttpRequest(authorizationToken, orderRequestJSON);
 
