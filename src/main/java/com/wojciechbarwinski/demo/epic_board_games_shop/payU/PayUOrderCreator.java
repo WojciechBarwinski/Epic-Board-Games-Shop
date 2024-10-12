@@ -53,6 +53,4 @@ public class PayUOrderCreator {
     private long convertToPayUAmount(BigDecimal price) {
         return price.multiply(BigDecimal.valueOf(100)).longValue();
     }
-
-
 }

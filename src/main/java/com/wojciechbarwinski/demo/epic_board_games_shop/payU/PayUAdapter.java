@@ -9,9 +9,11 @@ import com.wojciechbarwinski.demo.epic_board_games_shop.payU.exceptions.PayUAuth
 import com.wojciechbarwinski.demo.epic_board_games_shop.payU.exceptions.PayUInternalException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PayUAdapter implements PayUPort {
@@ -34,10 +36,14 @@ public class PayUAdapter implements PayUPort {
         String accessToken;
 
         try {
+            log.info("Attempting to retrieve access token from PayU...");
             accessToken = payUClient.getAccessToken(grant_type, client_id, client_secret).getAccess_token();
+            log.info("Access token retrieved successfully.");
         } catch (FeignException e) {
+            log.warn("Failed to retrieve access token: {}", e.getMessage());
             throw new PayUAuthException(e);
         } catch (Exception e) {
+            log.warn("Unexpected error occurred during access token retrieval: {}", e.getMessage());
             throw new PayUInternalException(e.getMessage());
         }
 
