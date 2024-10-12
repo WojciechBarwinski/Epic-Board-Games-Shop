@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.utils;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderLine;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-class PayUOrderCreator {
+public class PayUOrderCreator {
 
     private final HttpServletRequest request;
 
@@ -28,7 +28,7 @@ class PayUOrderCreator {
     @Value("${payU.merchant_posId}")
     private String merchantPosId;
 
-    PayUOrderRequestDTO createPayUOrderDTOFromOrder(Order order) {
+    public PayUOrderRequestDTO createPayUOrderDTOFromOrder(Order order) {
         PayUOrderRequestDTO orderRequestDTO = new PayUOrderRequestDTO();
         orderRequestDTO.setCustomerIp(request.getRemoteAddr());
         orderRequestDTO.setMerchantPosId(merchantPosId);

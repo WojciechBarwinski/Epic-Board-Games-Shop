@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.utils;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.clients.PayUClient;
 import com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.exceptions.PayUAuthException;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class PayUAuthTokenProvider {
+public class PayUAuthTokenProvider {
 
     private final PayUClient payUClient;
 
@@ -26,7 +26,7 @@ class PayUAuthTokenProvider {
     private String client_secret;
 
 
-    String getAccessToken() {
+    public String getAccessToken() {
 
         try {
             log.info("Attempting to retrieve access token from PayU");

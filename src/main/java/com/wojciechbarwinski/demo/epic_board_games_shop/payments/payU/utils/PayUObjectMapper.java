@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

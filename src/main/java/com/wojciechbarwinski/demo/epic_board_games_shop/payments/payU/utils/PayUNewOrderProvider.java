@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.utils;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.payments.PaymentDataDTO;
 import com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.clients.PayUClient;
@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-class PayUNewOrderProvider {
+public class PayUNewOrderProvider {
 
     private static final int payUCreateOrderCodeResponse = 302;
 
     private final PayUObjectMapper objectMapper;
     private final PayUClient payUClient;
 
-    PaymentDataDTO getNewPaymentOrder(String authorizationToken, PayUOrderRequestDTO payUOrderRequestDTO) {
+    public PaymentDataDTO getNewPaymentOrder(String authorizationToken, PayUOrderRequestDTO payUOrderRequestDTO) {
 
         String orderRequestJSON = objectMapper.mapPayUOrderRequestToJSON(payUOrderRequestDTO);
 
