@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payU.clients;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.clients;
 
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;

@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payU.dtos;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.dtos;
 
 import lombok.Data;
 

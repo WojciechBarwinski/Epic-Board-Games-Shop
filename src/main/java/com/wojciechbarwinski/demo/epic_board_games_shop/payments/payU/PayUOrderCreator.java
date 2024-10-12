@@ -1,9 +1,9 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payU;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU;
 
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.Order;
 import com.wojciechbarwinski.demo.epic_board_games_shop.entities.OrderLine;
-import com.wojciechbarwinski.demo.epic_board_games_shop.payU.dtos.PayUOrderRequestDTO;
-import com.wojciechbarwinski.demo.epic_board_games_shop.payU.dtos.PayUProductDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.dtos.PayUOrderRequestDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.dtos.PayUProductDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class PayUOrderCreator {
+class PayUOrderCreator {
 
     private final HttpServletRequest request;
 

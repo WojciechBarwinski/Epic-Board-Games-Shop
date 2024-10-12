@@ -1,4 +1,4 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payU.exceptions;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.exceptions;
 
 public class PayUInternalException extends PayUException{
 

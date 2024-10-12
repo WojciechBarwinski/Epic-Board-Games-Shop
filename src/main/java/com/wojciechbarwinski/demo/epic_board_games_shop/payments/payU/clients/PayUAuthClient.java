@@ -1,6 +1,6 @@
-package com.wojciechbarwinski.demo.epic_board_games_shop.payU.clients;
+package com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.clients;
 
-import com.wojciechbarwinski.demo.epic_board_games_shop.payU.dtos.PayUTokenResponseDTO;
+import com.wojciechbarwinski.demo.epic_board_games_shop.payments.payU.dtos.PayUTokenResponseDTO;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
